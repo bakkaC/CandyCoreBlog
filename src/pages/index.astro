@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/Layout.astro';
+import HomePage from '../components/pages/HomePage';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout>
+  <HomePage baseUrl={baseUrl} client:load />
+</BaseLayout>

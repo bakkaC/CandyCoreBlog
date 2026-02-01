@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/Layout.astro';
+import { getCollection, getEntryBySlug } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('life');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const entry = await getEntryBySlug('life', slug!);
+if (!entry) {
+  throw new Error(`Life post not found: ${slug}`);
+}
+
+const { Content } = await entry.render();
+---
+
+<BaseLayout title={entry.data.title ?? entry.slug} description={entry.data.description}>
+  <article class="mx-auto w-full max-w-4xl px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">
+        {entry.data.title ?? entry.slug}
+      </h1>
+      {entry.data.date ? (
+        <p class="mt-2 text-sm text-muted-foreground">
+          {new Date(entry.data.date).toLocaleDateString('zh-Hans')}
+        </p>
+      ) : null}
+    </div>
+    <div class="markdown">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

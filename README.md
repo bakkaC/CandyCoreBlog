@@ -1,41 +1,39 @@
-# Website
+# CdCore's Blog
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+CandyCoreBlog 是我的个人博客，记录前端开发、工程实践与随想杂记。
+
+## Tech Stack
+
+- Astro + React
+- Tailwind CSS
+- TypeScript
 
 ## Installation
 
 ```bash
-yarn
+pnpm install
 ```
 
 ## Local Development
 
 ```bash
-yarn start
+pnpm dev
 ```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ## Build
 
 ```bash
-yarn build
+pnpm build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+产物输出到 `dist` 目录。
+
+## Preview
+
+```bash
+pnpm preview
+```
 
 ## Deployment
 
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+使用 GitHub Actions 自动部署到 GitHub Pages：推送到 `main` 分支即触发构建与发布。

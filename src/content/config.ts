@@ -1,0 +1,16 @@
+import { defineCollection, z } from 'astro:content';
+
+const baseSchema = z
+  .object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    date: z.coerce.date().optional(),
+    tags: z.array(z.string()).optional(),
+  })
+  .passthrough();
+
+const notes = defineCollection({ type: 'content', schema: baseSchema });
+const thoughts = defineCollection({ type: 'content', schema: baseSchema });
+const life = defineCollection({ type: 'content', schema: baseSchema });
+
+export const collections = { notes, thoughts, life };

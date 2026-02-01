@@ -1,73 +1,37 @@
 {
-  "name": "my-website",
-  "version": "0.0.0",
+  "name": "candy-core-blog",
+  "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc",
-    "lint:md": "remark \"docs/**/!(_templates)/**/*.{md,mdx}\" --quiet -u remark-mdx",
-    "lint:md:style": "remark \"docs/**/*.{md,mdx}\" --quiet --frail"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "dependencies": {
-    "@docusaurus/babel": "^3.9.2",
-    "@docusaurus/core": "3.9.2",
-    "@docusaurus/faster": "^3.9.2",
-    "@docusaurus/plugin-content-blog": "^3.9.2",
-    "@docusaurus/plugin-content-docs": "^3.9.2",
-    "@docusaurus/preset-classic": "3.9.2",
-    "@docusaurus/remark-plugin-npm2yarn": "^3.9.2",
-    "@docusaurus/theme-common": "^3.9.2",
-    "@easyops-cn/docusaurus-search-local": "^0.52.1",
-    "@mdx-js/react": "^3.0.0",
-    "@radix-ui/react-avatar": "^1.1.11",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/react": "^4.4.2",
     "@radix-ui/react-slot": "^1.2.4",
+    "astro": "^5.17.1",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.0.0",
-    "framer-motion": "^12.23.25",
-    "lucide-react": "^0.556.0",
-    "prism-react-renderer": "^2.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.29.2",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.9.2",
-    "@docusaurus/tsconfig": "3.9.2",
-    "@docusaurus/types": "3.9.2",
-    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
     "postcss": "^8.5.6",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.1",
-    "remark": "^14.0.3",
-    "remark-cli": "^10.0.1",
-    "remark-lint": "^10.0.1",
-    "remark-mdx": "^2.3.0",
-    "remark-preset-lint-recommended": "^5.0.0",
-    "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "~5.6.2"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 5 safari version"
-    ]
-  },
-  "engines": {
-    "node": ">=20.0"
+    "typescript": "^5.6.3"
   }
 }

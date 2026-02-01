@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/Layout.astro';
+import ArticleList from '../../components/collection/ArticleList.astro';
+import { getCollection } from 'astro:content';
+
+const entries = await getCollection('thoughts');
+const sorted = [...entries].sort((a, b) => {
+  const aDate = a.data.date ? new Date(a.data.date).getTime() : 0;
+  const bDate = b.data.date ? new Date(b.data.date).getTime() : 0;
+  if (aDate !== bDate) return bDate - aDate;
+  return a.slug.localeCompare(b.slug, 'zh-Hans');
+});
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Thoughts" description="洞察思考文章列表">
+  <ArticleList
+    title="Thoughts"
+    subtitle="洞察思考与随笔"
+    entries={sorted}
+    baseUrl={baseUrl}
+    rootPath="/thoughts"
+  />
+</BaseLayout>

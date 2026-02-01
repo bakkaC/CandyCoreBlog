@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | CdCore's Blog` : "CdCore's Blog";
+const pageDescription =
+  description ?? '记录技术成长、分享生活感悟、探索思维边界';
+const baseUrl = import.meta.env.BASE_URL;
+const normalizeBase = (value: string) => (value.endsWith('/') ? value : `${value}/`);
+const withBase = (path: string) => {
+  const normalizedBase = normalizeBase(baseUrl);
+  const normalizedPath = path === '/' ? '' : path.startsWith('/') ? path.slice(1) : path;
+  return `${normalizedBase}${normalizedPath}`;
+};
+const homeHref = import.meta.env.DEV ? '/CandyCoreBlog' : withBase('/');
+---
+
+<!doctype html>
+<html lang="zh-Hans" class="bg-background text-foreground">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap"
+    />
+    <link rel="icon" href={withBase('/img/MyAvatar.png')} />
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <header class="sticky top-0 z-50 bg-background/80 backdrop-blur">
+      <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
+        <a href={homeHref} class="text-base font-semibold sm:text-lg">CdCore's Blog</a>
+        <nav class="flex items-center gap-6 text-xs md:text-sm">
+          <a class="hover:text-primary" href={withBase('/notes')}>Notes</a>
+          <a class="hover:text-primary" href={withBase('/thoughts')}>Thoughts</a>
+          <a class="hover:text-primary" href={withBase('/blog')}>Blogs</a>
+          <a class="hover:text-primary" href="https://github.com/cdhxr" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main class="min-h-[calc(100vh-80px)]">
+      <slot />
+    </main>
+  </body>
+</html>

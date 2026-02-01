@@ -1,0 +1,186 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import { FilesystemItem } from '../ui/filesystem-item';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  entries: CollectionEntry<'notes' | 'thoughts' | 'life'>[];
+  baseUrl: string;
+  rootPath: string;
+}
+
+const { title, subtitle, entries, baseUrl, rootPath } = Astro.props;
+
+const normalizeBase = (value: string) => (value.endsWith('/') ? value : `${value}/`);
+const withBase = (path: string) => {
+  const normalizedBase = normalizeBase(baseUrl);
+  if (path === '/') return normalizedBase === '/' ? '/' : normalizedBase.slice(0, -1);
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${normalizedBase}${normalizedPath}`;
+};
+
+const formatDate = (value?: Date) =>
+  value ? new Date(value).toLocaleDateString('zh-Hans') : '';
+
+const accentThemes = [
+  { path: '/notes', accent: '#60a5fa' },
+  { path: '/thoughts', accent: '#fcd34d' },
+  { path: '/blog', accent: '#f87171' },
+];
+
+const matchedTheme = accentThemes.find((theme) => theme.path === rootPath);
+const accent = matchedTheme?.accent ?? '#60a5fa';
+const accentBackground = accent;
+
+type TreeNode = {
+  name: string;
+  nodes: TreeNode[];
+  entry?: CollectionEntry<'notes' | 'thoughts' | 'life'>;
+};
+
+type FilesystemNode = {
+  name: string;
+  nodes?: FilesystemNode[];
+  href?: string;
+  index?: string;
+  title?: string;
+  meta?: string;
+  description?: string;
+};
+
+const buildTree = (
+  items: CollectionEntry<'notes' | 'thoughts' | 'life'>[]
+) => {
+  const root: TreeNode[] = [];
+
+  for (const entry of items) {
+    const parts = entry.slug.split('/');
+    let current = root;
+
+    parts.forEach((part, index) => {
+      let node = current.find((item) => item.name === part);
+      if (!node) {
+        node = { name: part, nodes: [] };
+        current.push(node);
+      }
+
+      if (index === parts.length - 1) {
+        node.entry = entry;
+      } else {
+        current = node.nodes;
+      }
+    });
+  }
+
+  return root;
+};
+
+const sortNodes = (nodes: TreeNode[]) => {
+  nodes.sort((a, b) => {
+    if (a.entry && !b.entry) return 1;
+    if (!a.entry && b.entry) return -1;
+    return a.name.localeCompare(b.name, 'zh-Hans');
+  });
+
+  nodes.forEach((node) => {
+    if (node.nodes.length) sortNodes(node.nodes);
+  });
+};
+
+const rawTree = buildTree(entries);
+sortNodes(rawTree);
+
+let runningIndex = 0;
+const toFilesystemNodes = (nodes: TreeNode[]): FilesystemNode[] =>
+  nodes.map((node) => {
+    if (node.entry) {
+      runningIndex += 1;
+      return {
+        name: node.name,
+        href: withBase(`${rootPath}/${node.entry.slug}`),
+        index: String(runningIndex).padStart(2, '0'),
+        title: node.entry.data.title ?? node.name,
+        meta: formatDate(node.entry.data.date),
+        description: node.entry.data.description,
+      };
+    }
+
+    return {
+      name: node.name,
+      title: node.name,
+      nodes: toFilesystemNodes(node.nodes),
+    };
+  });
+
+const treeNodes: FilesystemNode[] = toFilesystemNodes(rawTree);
+---
+
+<section
+  class="relative min-h-[calc(100vh-80px)] overflow-hidden bg-(--accent-bg) text-stone-900"
+  style={`--accent: ${accent}; --accent-bg: ${accentBackground};`}
+>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 z-0 bg-black/10"
+  />
+  <div
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-0 z-20 border-16 border-white"
+  />
+  <div class="relative z-10 mx-auto w-full max-w-4xl px-8 pt-6 pb-12 sm:max-w-5xl sm:px-6 sm:py-16 lg:px-10">
+    <div class="flex flex-col gap-6">
+      <div class="max-w-2xl">
+        <p class="text-[0.6rem] uppercase text-white sm:text-xs">archive</p>
+        <h1 class="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          {title}
+        </h1>
+        <p class="mt-2 text-sm leading-relaxed text-stone-200 sm:text-base">
+          {subtitle}
+        </p>
+      </div>
+
+      <div class="mt-6 border border-stone-200 bg-slate-50 p-4 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.25)] sm:p-6">
+        <div class="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-stone-500">
+          <span>Title</span>
+          <span>Date</span>
+        </div>
+
+        <div class="mt-6 font-mono text-[0.9rem] sm:text-[0.95rem]">
+          {treeNodes.length ? (
+            <ul class="divide-y divide-stone-200">
+              {treeNodes.map((node) => (
+                <FilesystemItem
+                  showIcons
+                  iconSrc="/kumiko.jpg"
+                  iconAlt="Kumiko icon"
+                  showToggles
+                  node={node}
+                  itemClassName="py-3"
+                  linkClassName="group flex-col gap-2 transition hover:translate-x-1"
+                  client:load
+                />
+              ))}
+            </ul>
+          ) : (
+            <p class="py-6 text-sm text-stone-600">No entries yet.</p>
+          )}
+        </div>
+      </div>
+
+      <div class="mt-6 text-xs uppercase sm:text-sm">
+        <a
+          href={withBase('/')}
+          class="group relative inline-flex items-center gap-2 overflow-hidden border border-white px-3 py-2 text-white transition-colors duration-300 hover:text-stone-900"
+        >
+          <span
+            aria-hidden="true"
+            class="absolute inset-0 -translate-x-full bg-white transition-transform duration-300 group-hover:translate-x-0"
+          />
+          <span class="relative z-10">&larr; back to home</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

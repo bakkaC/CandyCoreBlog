@@ -38,7 +38,7 @@ export function Tiles({
           key={`row-${i}`}
           className={cn(
             tileSizes[tileSize],
-            'tile border-l border-neutral-200 dark:border-neutral-700 relative',
+            'tile border-l border-neutral-200 relative',
             tileClassName
           )}
         >
@@ -54,7 +54,7 @@ export function Tiles({
               key={`col-${j}`}
               className={cn(
                 tileSizes[tileSize],
-                'tile border-r border-t dark:border-neutral-700 border-neutral-200 relative',
+                'tile border-r border-t border-neutral-200 relative',
                 tileClassName
               )}
             />
