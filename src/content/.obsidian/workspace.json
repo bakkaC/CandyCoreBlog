@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "thoughts/文档bug相关记录.md",
+                "file": "thoughts/react设计策略与哲学.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "文档bug相关记录"
+              "title": "react设计策略与哲学"
             }
           }
         ],
@@ -239,8 +239,19 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "55fcc00d91339a11",
+  "active": "b3d3f10987293af9",
   "lastOpenFiles": [
+    "thoughts/assets/react设计策略与哲学/file-20260201222847516.png",
+    "thoughts/状态管理库与组件解耦.md",
+    "thoughts/RSC & Nextjs.md",
+    "thoughts/React并发模式原理与应用.md",
+    "thoughts/chatbox阅读记录.md",
+    "thoughts/AI coding Best Practice.md",
+    "blogs/失恋-花-电锯.md",
+    "blogs/健康话题的思考.md",
+    "blogs/「 百米 」观后感.md",
+    "thoughts/文档bug相关记录.md",
+    "thoughts/assets/react设计策略与哲学",
     "blogs/assets/「 百米 」观后感/assets/mX7SGjfO5WuVxo1gza7KHxZEm8rFZ4Wr19QXLM9I9Yg=.png",
     "blogs/assets/「 百米 」观后感/assets/hsuqI-iNFgrpQ9nKrLsrW8gJQ4kQ5qYgUlzX1NnSPUA=.png",
     "blogs/assets/「 百米 」观后感/assets/hGCZMqMjgv3PkvTKhnWpcVA2i6qUyMpwYzm4YgU8CUg=.png",
@@ -251,13 +262,9 @@
     "blogs/assets/失恋-花-电锯/file-20251211085734631.jpg",
     "blogs/assets/失恋-花-电锯/file-20251211085722041.jpg",
     "blogs/assets/失恋-花-电锯/file-20251211085636069.jpg",
-    "blogs/assets/失恋-花-电锯/file-20251211085704655.jpg",
     "blogs/assets/「 百米 」观后感/assets",
     "blogs/assets/「 百米 」观后感",
     "blogs/assets/失恋-花-电锯",
-    "blogs/失恋-花-电锯.md",
-    "blogs/健康话题的思考.md",
-    "blogs/「 百米 」观后感.md",
     "blogs/assets",
     "blogs",
     "blog/assets/「 百米 」观后感/assets",
@@ -267,20 +274,13 @@
     "blog/健康话题的思考.md",
     "blog/「 百米 」观后感.md",
     "blog/assets",
-    "blog",
     "thoughts/基于vite的代码拆分.md",
-    "thoughts/文档bug相关记录.md",
     "文档bug相关记录/文档bug相关记录.md",
-    "thoughts/React并发模式原理与应用.md",
     "thoughts/js函数队列性质.md",
     "thoughts/图像批量裁剪的性能优化.md",
-    "thoughts/chatbox阅读记录.md",
-    "thoughts/AI coding Best Practice.md",
     "notes/react Rendering strategy.md",
-    "notes/react设计策略与哲学.md",
-    "thoughts/RSC & Nextjs.md",
+    "thoughts/react设计策略与哲学.md",
     "Excalidraw/Drawing 2026-02-01 16.42.04.excalidraw.md",
-    "thoughts/状态管理库与组件解耦.md",
     "thoughts/如何设计良好的react代码.md",
     "notes/Promise的拆解.md",
     "notes/八股/simplified-setstate.md",
