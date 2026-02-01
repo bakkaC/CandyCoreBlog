@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ArrowDown, ExternalLink } from 'lucide-react';
 import { Tiles } from '../ui/tiles';
 import Noise from '../ui/Noise';
+import FallingText from '../FallingText';
 
 interface HomePageProps {
   baseUrl: string;
@@ -111,13 +112,31 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
                     </a>
                   ))}
                 </div>
+                <div className="mt-4 md:mt-8 flex items-center gap-2 text-xs uppercase  text-slate-500">
+                  <span>Favorite Stack / Tool</span>
+                  <ArrowDown className="h-4 w-4" />
+                </div>
+              </div>
+              
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-24 w-full max-w-xs md:max-w-xl z-10 h-56 transform md:left-8 md:translate-x-0 lg:left-16 md:bottom-12">
+                <FallingText
+                  text="React TailwindCSS TanstackStart NestJS Codex PostgreSQL AfterEffects Figma "
+                  highlightClass="highlighted"
+                  trigger="auto"
+                  backgroundColor="transparent"
+                  wireframes={false}
+                  gravity={0.56}
+                  chaosFactor={1.5}
+                  fontSize="clamp(0.875rem,3vw,1.9rem)"
+                  mouseConstraintStiffness={0.9}
+                />
               </div>
 
-              <div className="flex w-full items-center justify-center gap-3 overflow-x-auto min-h-80 md:flex-1 md:items-start sm:gap-4 sm:min-h-120 lg:min-h-140">
+              <div className="flex w-full items-center justify-center gap-3 overflow-x-auto min-h-76 md:flex-1 md:items-start sm:gap-4 sm:min-h-120 lg:min-h-140">
                 {accordionItems.map((item, index) => (
                   <div
                     key={item.id}
-                    className={` relative h-80 rounded-none overflow-hidden cursor-pointer bg-muted transition-all duration-700 ease-in-out sm:h-120 lg:h-140 ${
+                    className={` relative h-76 rounded-none overflow-hidden cursor-pointer bg-muted transition-all duration-700 ease-in-out sm:h-120 lg:h-140 ${
                       index === activeIndex
                         ? 'w-[16rem] sm:w-88 lg:w-100'
                         : 'w-12 sm:w-16 lg:w-15'
