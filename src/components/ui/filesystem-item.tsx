@@ -40,19 +40,6 @@ export function FilesystemItem({
   let label: ReactNode;
   if (node.label) {
     label = node.label;
-  } else if (node.index || node.title) {
-    label = (
-      <span className="inline-flex items-center gap-4">
-        {node.index ? (
-          <span className="text-xs font-semibold">
-            {node.index}
-          </span>
-        ) : null}
-        <span className="text-base font-medium tracking-tight group-hover:text-accent">
-          {node.title ?? node.name}
-        </span>
-      </span>
-    );
   } else {
     label = node.name;
   }
@@ -108,16 +95,40 @@ export function FilesystemItem({
     return isOpen && <ul className="pl-6">{children}</ul>;
   };
 
-  const body = (
-    <div className="flex w-full flex-col gap-2">
-      <div className="flex w-full items-center justify-between gap-6">
-        <div className="flex items-center gap-4">{label}</div>
-        {node.meta ? (
-          <span className="text-xs">{node.meta}</span>
-        ) : null}
-      </div>
+  const titleText = node.title ?? node.name;
+  const contentStack = node.label ? (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-4">{label}</div>
       {node.description ? (
-        <div className="text-sm ">{node.description}</div>
+        <div className="text-sm">{node.description}</div>
+      ) : null}
+    </div>
+  ) : node.index ? (
+    <div className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">
+      <span className="text-xs font-semibold">{node.index}</span>
+      <span className="text-base font-medium tracking-tight group-hover:text-accent">
+        {titleText}
+      </span>
+      {node.description ? (
+        <div className="col-start-2 text-sm">{node.description}</div>
+      ) : null}
+    </div>
+  ) : (
+    <div className="flex flex-col gap-2">
+      <span className="text-base font-medium tracking-tight group-hover:text-accent">
+        {titleText}
+      </span>
+      {node.description ? (
+        <div className="text-sm">{node.description}</div>
+      ) : null}
+    </div>
+  );
+
+  const body = (
+    <div className="flex w-full items-start justify-between gap-6">
+      <div className="flex items-start gap-4">{contentStack}</div>
+      {node.meta ? (
+        <span className="text-xs">{node.meta}</span>
       ) : null}
     </div>
   );

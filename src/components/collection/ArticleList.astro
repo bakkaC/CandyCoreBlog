@@ -6,7 +6,7 @@ import { FilesystemItem } from '../ui/filesystem-item';
 interface Props {
   title: string;
   subtitle: string;
-  entries: CollectionEntry<'notes' | 'thoughts' | 'life'>[];
+  entries: CollectionEntry<'notes' | 'thoughts' | 'blogs'>[];
   baseUrl: string;
   rootPath: string;
 }
@@ -37,7 +37,7 @@ const accentBackground = accent;
 type TreeNode = {
   name: string;
   nodes: TreeNode[];
-  entry?: CollectionEntry<'notes' | 'thoughts' | 'life'>;
+  entry?: CollectionEntry<'notes' | 'thoughts' | 'blogs'>;
 };
 
 type FilesystemNode = {
@@ -51,7 +51,7 @@ type FilesystemNode = {
 };
 
 const buildTree = (
-  items: CollectionEntry<'notes' | 'thoughts' | 'life'>[]
+  items: CollectionEntry<'notes' | 'thoughts' | 'blogs'>[]
 ) => {
   const root: TreeNode[] = [];
 
@@ -81,6 +81,11 @@ const sortNodes = (nodes: TreeNode[]) => {
   nodes.sort((a, b) => {
     if (a.entry && !b.entry) return 1;
     if (!a.entry && b.entry) return -1;
+    if (a.entry && b.entry) {
+      const aDate = a.entry.data.date ? new Date(a.entry.data.date).getTime() : 0;
+      const bDate = b.entry.data.date ? new Date(b.entry.data.date).getTime() : 0;
+      if (aDate !== bDate) return bDate - aDate;
+    }
     return a.name.localeCompare(b.name, 'zh-Hans');
   });
 
@@ -92,15 +97,15 @@ const sortNodes = (nodes: TreeNode[]) => {
 const rawTree = buildTree(entries);
 sortNodes(rawTree);
 
-let runningIndex = 0;
-const toFilesystemNodes = (nodes: TreeNode[]): FilesystemNode[] =>
-  nodes.map((node) => {
+const toFilesystemNodes = (nodes: TreeNode[]): FilesystemNode[] => {
+  let localIndex = 0;
+  return nodes.map((node) => {
     if (node.entry) {
-      runningIndex += 1;
+      localIndex += 1;
       return {
         name: node.name,
         href: withBase(`${rootPath}/${node.entry.slug}`),
-        index: String(runningIndex).padStart(2, '0'),
+        index: String(localIndex).padStart(2, '0'),
         title: node.entry.data.title ?? node.name,
         meta: formatDate(node.entry.data.date),
         description: node.entry.data.description,
@@ -113,6 +118,7 @@ const toFilesystemNodes = (nodes: TreeNode[]): FilesystemNode[] =>
       nodes: toFilesystemNodes(node.nodes),
     };
   });
+};
 
 const treeNodes: FilesystemNode[] = toFilesystemNodes(rawTree);
 ---

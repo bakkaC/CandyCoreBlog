@@ -11,6 +11,6 @@ const baseSchema = z
 
 const notes = defineCollection({ type: 'content', schema: baseSchema });
 const thoughts = defineCollection({ type: 'content', schema: baseSchema });
-const life = defineCollection({ type: 'content', schema: baseSchema });
+const blogs = defineCollection({ type: 'content', schema: baseSchema });
 
-export const collections = { notes, thoughts, life };
+export const collections = { notes, thoughts, blogs };

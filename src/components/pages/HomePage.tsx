@@ -78,9 +78,9 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
       /> */}
 
       <section className="w-full h-full relative z-10">
-        <div className="w-full border-y-2 border-slate-300 py-8 mb-6 sm:py-10">
+        <div className="w-full border-y-0 sm:border-y-2 sm:border-slate-300 py-0 mb-0 sm:py-10 sm:mb-6">
           <div className="mx-auto max-w-7xl w-full">
-            <div className="relative bg-white p-12 md:p-8 flex w-full flex-col items-center gap-6 sm:p-12 sm:gap-8 md:flex-row md:flex-nowrap md:items-start md:justify-start md:gap-40 lg:p-16 lg:gap-80">
+            <div className="relative bg-white p-12 md:p-8 flex w-full flex-col items-center gap-20 sm:p-12 sm:gap-8 md:flex-row md:flex-nowrap md:items-start md:justify-start md:gap-40 lg:p-16 lg:gap-80">
               <span className="pointer-events-none absolute left-6 top-6 h-6 w-6 border-l-2 border-t-2 border-slate-900" />
               <span className="pointer-events-none absolute right-6 top-6 h-6 w-6 border-r-2 border-t-2 border-slate-900" />
               <span className="pointer-events-none absolute left-6 bottom-6 h-6 w-6 border-l-2 border-b-2 border-slate-900" />
@@ -89,7 +89,7 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
                 <div className="text-3xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                   CandieCore
                 </div>
-                <div className="mt-3 text-base text-slate-500 sm:mt-6 sm:text-lg">
+                <div className="mt-4 text-base text-slate-500 sm:mt-6 sm:text-lg">
                   Love Creating
                 </div>
                 <div className="mt-6 flex flex-col gap-3 font-mono sm:mt-14 sm:gap-6 lg:mt-20">
@@ -99,9 +99,9 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
                       href={link.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group inline-flex items-center gap-3 text-sm text-slate-900 transition-colors sm:text-base sm:text-slate-500 sm:hover:text-slate-900"
+                      className="group inline-flex w-full items-center gap-3 text-sm text-slate-900 transition-colors sm:w-auto sm:text-base sm:text-slate-500 sm:hover:text-slate-900"
                     >
-                      <span className="relative inline-flex w-64 items-center justify-start gap-2 whitespace-nowrap pb-1 sm:w-72 lg:w-80">
+                      <span className="relative inline-flex w-full items-center justify-start gap-2 whitespace-nowrap pb-1 sm:w-72 lg:w-80">
                         <span className="absolute bottom-0 left-0 h-px w-full bg-slate-500 transition-all duration-300 sm:w-0 sm:group-hover:w-full" />
                         <span className="relative text-left">{link.label}</span>
                         <span className="ml-auto opacity-100 translate-x-0 transition-all duration-300 sm:opacity-0 sm:translate-x-1 sm:group-hover:opacity-100 sm:group-hover:translate-x-0">
@@ -113,11 +113,11 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
                 </div>
               </div>
 
-              <div className="flex w-full items-center justify-center gap-3 overflow-x-auto min-h-96 md:flex-1 md:items-start sm:gap-4 sm:min-h-120 lg:min-h-140">
+              <div className="flex w-full items-center justify-center gap-3 overflow-x-auto min-h-80 md:flex-1 md:items-start sm:gap-4 sm:min-h-120 lg:min-h-140">
                 {accordionItems.map((item, index) => (
                   <div
                     key={item.id}
-                    className={` relative h-96 rounded-none overflow-hidden cursor-pointer bg-muted transition-all duration-700 ease-in-out sm:h-120 lg:h-140 ${
+                    className={` relative h-80 rounded-none overflow-hidden cursor-pointer bg-muted transition-all duration-700 ease-in-out sm:h-120 lg:h-140 ${
                       index === activeIndex
                         ? 'w-[16rem] sm:w-88 lg:w-100'
                         : 'w-12 sm:w-16 lg:w-15'

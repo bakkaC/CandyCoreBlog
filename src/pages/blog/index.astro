@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/Layout.astro';
 import ArticleList from '../../components/collection/ArticleList.astro';
 import { getCollection } from 'astro:content';
 
-const entries = await getCollection('life');
+const entries = await getCollection('blogs');
 const sorted = [...entries].sort((a, b) => {
   const aDate = a.data.date ? new Date(a.data.date).getTime() : 0;
   const bDate = b.data.date ? new Date(b.data.date).getTime() : 0;
@@ -16,7 +16,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <BaseLayout title="Blogs" description="随想杂记文章列表">
   <ArticleList
-    title="Life"
+    title="Blog"
     subtitle="随想杂记与生活记录"
     entries={sorted}
     baseUrl={baseUrl}
