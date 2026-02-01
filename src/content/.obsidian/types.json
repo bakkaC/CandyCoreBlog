@@ -1,0 +1,13 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "date": "datetime",
+    "d": "checkbox",
+    "": "date",
+    "last_update": "datetime",
+    "toc_max_heading_level": "number",
+    "image": "text"
+  }
+}
