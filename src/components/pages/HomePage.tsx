@@ -19,6 +19,8 @@ const withBase = (baseUrl: string, path: string) => {
 export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
   const [activeIndex, setActiveIndex] = useState(2);
 
+  const avatarSrc = withBase(baseUrl, '/kumiko.jpg');
+
   const accordionItems = [
     {
       id: 1,
@@ -87,7 +89,12 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
               <span className="pointer-events-none absolute left-6 bottom-6 h-6 w-6 border-l-2 border-b-2 border-slate-900" />
               <span className="pointer-events-none absolute right-6 bottom-6 h-6 w-6 border-r-2 border-b-2 border-slate-900 " />
               <div className="w-full max-w-xs text-slate-800 md:shrink-0">
-                <div className="text-3xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                <div className="flex items-center gap-4 text-3xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                  <img
+                    src={avatarSrc}
+                    alt="CandieCore 头像"
+                    className="h-10 w-10 md:h-16 md:w-16 rounded-full object-cover border border-slate-300"
+                  />
                   CandieCore
                 </div>
                 <div className="mt-4 text-base text-slate-500 sm:mt-6 sm:text-lg">
