@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'url';
 // @ts-check
 
@@ -12,7 +13,13 @@ export default defineConfig({
   base: '/CandyCoreBlog/',
   trailingSlash: 'never',
   output: 'static',
-  integrations: [react()],
+  integrations: [
+    react(),
+    sitemap({
+      filter: (page) =>
+        !page.endsWith('/rss.xml') && !page.endsWith('/robots.txt'),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
     resolve: {

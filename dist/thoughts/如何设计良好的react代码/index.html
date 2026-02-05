@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-Hans" class="bg-background text-foreground"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>如何设计良好的react代码 | CdCore&#39;s Blog</title><meta name="description" content="记录技术成长、分享生活感悟、探索思维边界"><meta name="author" content="CdCore"><meta name="robots" content="index, follow"><link rel="canonical" href="https://cdhxr.github.io/CandyCoreBlog/thoughts/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%89%AF%E5%A5%BD%E7%9A%84react%E4%BB%A3%E7%A0%81"><meta property="og:title" content="如何设计良好的react代码 | CdCore's Blog"><meta property="og:description" content="记录技术成长、分享生活感悟、探索思维边界"><meta property="og:type" content="article"><meta property="og:url" content="https://cdhxr.github.io/CandyCoreBlog/thoughts/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%89%AF%E5%A5%BD%E7%9A%84react%E4%BB%A3%E7%A0%81"><meta property="og:site_name" content="CdCore's Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="如何设计良好的react代码 | CdCore's Blog"><meta name="twitter:description" content="记录技术成长、分享生活感悟、探索思维边界"><meta name="twitter:image" content="https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"><meta property="article:published_time" content="2025-12-08T08:52:00.000Z"><link rel="alternate" type="application/rss+xml" title="CdCore's Blog RSS" href="https://cdhxr.github.io/CandyCoreBlog/rss.xml"><script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","name":"CdCore's Blog","url":"https://cdhxr.github.io/CandyCoreBlog/","inLanguage":"zh-Hans"},{"@context":"https://schema.org","@type":"BlogPosting","headline":"如何设计良好的react代码","description":"记录技术成长、分享生活感悟、探索思维边界","url":"https://cdhxr.github.io/CandyCoreBlog/thoughts/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%89%AF%E5%A5%BD%E7%9A%84react%E4%BB%A3%E7%A0%81","mainEntityOfPage":{"@type":"WebPage","@id":"https://cdhxr.github.io/CandyCoreBlog/thoughts/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%89%AF%E5%A5%BD%E7%9A%84react%E4%BB%A3%E7%A0%81"},"inLanguage":"zh-Hans","datePublished":"2025-12-08T08:52:00.000Z","image":["https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"],"author":{"@type":"Person","name":"CdCore","url":"https://cdhxr.github.io/CandyCoreBlog/"}}]</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap"><link rel="icon" type="image/jpeg" href="/CandyCoreBlog/kumiko.jpg"><link rel="prefetch" href="/CandyCoreBlog/notes"><link rel="prefetch" href="/CandyCoreBlog/thoughts"><link rel="prefetch" href="/CandyCoreBlog/blog"><link rel="stylesheet" href="/CandyCoreBlog/_astro/_slug_.BoJbkLhB.css"></head> <body class="min-h-screen bg-background text-foreground"> <header class="sticky top-0 z-50 bg-background/80 backdrop-blur"> <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4"> <a href="/CandyCoreBlog/" class="text-base font-semibold sm:text-lg">CdCore's Blog</a> <nav class="flex items-center gap-6 text-xs md:text-sm"> <a class="hover:text-primary" href="/CandyCoreBlog/notes" rel="prefetch"> Notes </a><a class="hover:text-primary" href="/CandyCoreBlog/thoughts" rel="prefetch" aria-current="page"> Thoughts </a><a class="hover:text-primary" href="/CandyCoreBlog/blog" rel="prefetch"> Blogs </a> </nav> </div> </header> <main class="min-h-[calc(100vh-80px)]">  <article class="mx-auto w-full max-w-4xl px-6 py-12"> <div class="mb-8"> <h1 class="text-3xl font-bold"> 如何设计良好的react代码 </h1> <p class="mt-2 text-sm text-muted-foreground"> 2025/12/8 </p> </div> <div class="markdown"> <p>不幸的是，角色模块已经重构了无数遍了，我每次看都觉得有很多写的不好的地方</p>
+<p>现在总算把我认为明显的一些问题差不多修了，事实证明，AI的代码也许能跑，但是真的很容易成屎山</p>
+<p>写了半年的React代码，脑子里遇到各类问题的时候基本都有了思考的方向，</p>
+<p>我有一种感觉遇到的情况应该足以写成一种指南或者原则之类的东西，那么就让我来做这件事吧</p>
+<hr>
+<h2 id="如何设计组件树">如何设计组件树</h2>
+<p>React的哲学曾提到 UI = F (state)的模型，Function就是Functional Component即组件</p>
+<p>组件的结构，就是UI的结构，设计好的组件和设计好的UI其实是很接近的事</p>
+<p>可以说，UI一旦确定，组件怎么分是一件很容易依赖直觉完成的事情</p>
+<ul>
+<li>
+<p>首先设计好UI的结构吧（这就不是程序员的工作了），</p>
+<p>我认为UI就是不同功能块拼凑而成的，我下面说的功能块就是视图上的一些承担一定功能的区域，好的UI设计会在视觉上引导你理解这些事情</p>
+</li>
+<li>
+<p>其次，思考一个功能模块，要不要单独分出一个文件</p>
+<ul>
+<li>
+<p>如果一个功能块的组件，包括大量的子功能，那么应该进行组件化，更加模块化，易于维护</p>
+</li>
+<li>
+<p>如果一个功能块的组件，会被多个部分复用，那么显然应该对其进行抽象</p>
+</li>
+<li>
+<p>如果一个功能块的组件，本身就足够简洁且逻辑集中了，那么再拆分为几个组件，会增加Props传递，消耗额外的精力切换文件（对程序员和AI都更不友好），会更难维护，增加复杂性，我认为500行以内的组件只要逻辑集中就没必要拆分</p>
+</li>
+</ul>
+</li>
+<li>
+<p>当然，不只是组件，管理逻辑，即hooks也可以用类似的想法</p>
+</li>
+</ul>
+<hr>
+<h2 id="如何设计和管理状态">如何设计和管理状态</h2>
+<p>UI = F (state)，可以译作UI是 State 的 snapshot（快照），</p>
+<p>React的哲学去掉了生命周期的概念，把渲染的心智模型简化成一个状态机，代价是状态管理的复杂度</p>
+<p>状态的是React用于渲染的数据源，地位上类似于MVC中的M（某种程度上React就是代理了MVC中的C）</p>
+<h3 id="减少state">减少state</h3>
+<p>在探讨如何管理state前，首先你应该考虑如何减少、只保留最少的state，这是对state Management帮助最大的</p>
+<ol>
+<li>
+<p>UI = F (state)，很自然的可以理解state是会修改，且会影响渲染的数据，而不是普通的中间值</p>
+<ol start="2">
+<li>
+<p>是否会随时间改变？</p>
+</li>
+<li>
+<p>是否在渲染中被使用？</p>
+</li>
+</ol>
+</li>
+<li>
+<p>是否不能由其他 state 或 props 推导出来？</p>
+</li>
+</ol>
+<p>这一点是说明，UI = F (state)，但状态不一定要用useState声明，
+可以使用useMemo依赖state派生的普通变量
+这是减少state的关键</p>
+<p>只保留了必要的state后，我们再来谈谈怎么管理状态</p>
+<h3 id="管理状态">管理状态</h3>
+<p>首先，我说的状态不是仅仅指useState声明的变量，可以是任何影响UI的数据，如</p>
+<ol>
+<li>
+<p>服务端状态</p>
+</li>
+<li>
+<p>客户端状态</p>
+<ol start="3">
+<li>
+<p>内部状态</p>
+</li>
+<li>
+<p>共享状态</p>
+</li>
+</ol>
+</li>
+<li>
+<p>路由状态</p>
+</li>
+<li>
+<p>甚至localStorage这类浏览器存储的数据</p>
+</li>
+</ol>
+<p>…</p>
+<p>首先选择合适渲染策略，SPA还是MPA，CSR还是SSR，在客户端fetch Data在客户端还是服务端，这些会影响你的状态管理策略，不同的渲染策略自然包括不同种类的状态，于是我将针对于不同的状态类型来谈</p>
+<p>特别是，对于任何状态数据，都有三个问题需要回答：</p>
+<ul>
+<li>
+<p>谁管理（获取/存储/更新等）这些数据？</p>
+</li>
+<li>
+<p>它最初是如何分配给依赖它的组件的？</p>
+</li>
+<li>
+<p>这些数据的更新是如何发布给组件的？</p>
+</li>
+</ul>
+<p>我们在回答这些问题时做出的选择决定了我们应用程序的数据架构。</p>
+<h3 id="服务端状态远程状态">服务端状态（远程状态）</h3>
+<p>网络请求，异步状态，来自服务端的数据</p>
+<p>“状态管理”的一个非常独特且通常相当复杂的使用场景一直是如何处理”远程”数据。</p>
+<p>UI 至少需要能够处理三种数据状态：数据尚未加载、数据正在加载、数据最终加载完成。</p>
+<p>但是，在数据加载过程中可能会发生某些情况，比如服务器宕机。因此，你需要在这里添加一种处理失败的方式。你还不想触发多次获取，如果两个或多个组件想要从完全相同的端点获取数据的话。</p>
+<p>如果你在一个页面上获取了那些数据，你可能想要缓存它们以便在另一个页面上重用。尽管你可能需要实现一些机制来定期刷新这个缓存以避免过时的数据，或者完全清理它。</p>
+<p>说到缓存。我们当然会希望避免request waterfall，当对数据的请求被困在一个条件渲染的组件中，而这个组件只有在另一个完全无关的请求完成后才会触发时。在这种情况下，你希望并行化这些请求，预取隐藏的数据，将其放入缓存中，并在需要时从缓存中提取它。</p>
+<p>需要在用户交互的响应中获取这些数据时，需要处理竞态条件</p>
+<p>如果数据可以被修改，你将会陷入痛苦的境地，尤其是当你想在保持数据同步的同时添加“乐观更新”的概念</p>
+<p>必须面对数据同步、回滚、并发、缓存一致性等一整套复杂问题。</p>
+<p>在useEffect这个令人讨厌的hooks中处理它，会造成超级复杂的心智负担</p>
+<p><a href="https://tkdodo.eu/blog/why-you-want-react-query">Why You Want Need React Query</a></p>
+<p>使用Tanstack Query来解决吧，或者使用SWR等等后来的竞品库，总之我们应该使用这些库来解决remote state</p>
+<h3 id="路由状态">路由状态</h3>
+<p>需要在意状态管理的项目几乎都会用到Router，这能显著提升性能</p>
+<p>考虑这个 URL： <code>/somepath?search="test"&#x26;tab=1&#x26;sidebar=open&#x26;onboarding=step1</code> 。问号之后的部分是一个状态，它定义了哪个选项卡是打开的、侧边栏是打开还是关闭，以及引导流程处于哪个阶段。当 URL 发生变化时，UI 应该反映这一点。当用户通过引导步骤或点击新选项卡进行切换时，URL 也应该随之改变。</p>
+<p>我们显然需要使用这些参数来控制渲染，React Router 为此提供了 <code>useSearchParam</code> 钩子，你可以像使用状态一样使用它。</p>
+<p>但是如果你选择的框架没有类似的功能，你如果需要将它们与内部状态同步（包括更新），仍然需要费一番周折。</p>
+<p>这种情况可以考虑使用nuqs 库</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> MyApp</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">step</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setStep</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useQueryState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'onboarding'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;></span></span>
+<span class="line"><span style="color:#E1E4E8">      &#x3C;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> onClick</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{() </span><span style="color:#F97583">=></span><span style="color:#B392F0"> setStep</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'step2'</span><span style="color:#E1E4E8">)}>Next Step&#x3C;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;/></span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="客户端状态">客户端状态</h3>
+<h4 id="1-组件内部状态">1. 组件内部状态</h4>
+<p>下拉菜单是打开还是关闭？提示框是否可见？组件是否已挂载？基本上，所有存在于组件逻辑边界内且不需要与其他组件共享的信息。</p>
+<p>对于这些状态，我们不需要使用状态管理库，就正常的使用他们吧，不要引入额外的复杂度</p>
+<h4 id="2-共享状态">2. 共享状态</h4>
+<p>组件树有时会很复杂，这时相同的状态必然会被更多地方用到，</p>
+<p>React推崇提升状态至公共父组件，使用Props向下传递共享状态，</p>
+<p>这对嵌套传递层级超过3的情况不是一个好的实践，大量无用的Props，代码难以阅读。重构这个状态将需要更改每个组件。该层级中的每个组件都会在每个状态变化时重新渲染，而且完全没有办法阻止这种情况。prop drilling</p>
+<ol>
+<li>useContext</li>
+</ol>
+<p>解决prop drilling，一个常用的做法是useContext，代码易于阅读且简洁。不再有不必要的属性。重构状态不再意味着完全重写。我只需要更改实际使用它的组件。</p>
+<p>尽管你可能听到过 Context 对性能不好，但性能甚至可能得到提升。因为只有使用该 Context 的组件会在其状态变化时重新渲染。我们移除了传递性属性的所有中间层组件将不再重新渲染。</p>
+<p>如果广泛使用Context，</p>
+<p>依然会带来性能问题，而且很难定位，需要使用useMemo/useCallback来完全避免（难度往往很大，或者等React Compiler成熟）</p>
+<p>如果局部使用，零散的Provider显然不是很好的实践，起码也是一个大功能模块的根部（只有这种地方，才会需要共享状态），那么Provider内的逻辑会很耦合，可读性会变差，</p>
+<p>如果分成很多个Provider，可能又会遇到Provider地狱，在某个时刻，你可能想要将其中一些分组，但其他人不会理解分组逻辑，并在组外添加其他 Provider。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> MyApp</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">          &#x3C;</span><span style="color:#79B8FF">SomethingElse</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">                  &#x3C;</span><span style="color:#79B8FF">ThemingProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">                    &#x3C;</span><span style="color:#79B8FF">SidebarProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">                      ...</span></span>
+<span class="line"><span style="color:#E1E4E8">                    &#x3C;/</span><span style="color:#79B8FF">SidebarProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">            &#x3C;/</span><span style="color:#79B8FF">ThemingProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;/</span><span style="color:#79B8FF">SomethingElse</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>其中一些 Provider 会开始相互依赖。其中一些在根级别上并不真正有意义，所以你会尝试将它们移到代码的末尾，以便在下次重构时忘记它们，并因依赖于 Context 但在顶部丢失了 Provider 的组件的奇怪行为而感到困惑。</p>
+<p>不过这些问题在一定复杂度之前，其实不是特别严重的问题</p>
+<ul>
+<li>External Store</li>
+</ul>
+<p>只有当您的应用程序中有更复杂的共享状态问题时，并且您预测 Context 不足以应对，这时才需要考虑使用外部状态管理库。</p>
+<ul>
+<li>
+<p><a href="https://redux.js.org/">Redux</a> &#x26; <a href="https://redux-toolkit.js.org/">Redux Toolkit</a></p>
+</li>
+<li>
+<p><a href="https://github.com/pmndrs/zustand">Zustand</a></p>
+</li>
+<li>
+<p><a href="https://mobx.js.org/README.html">MobX</a></p>
+</li>
+<li>
+<p><a href="https://jotai.org/">Jotai</a></p>
+</li>
+<li>
+<p><a href="https://xstate.js.org/">XState</a></p>
+</li>
+</ul>
+<p>外部store，解决了共享状态的逻辑模块化和useContext的性能问题</p>
+<h3 id="localstorage">localStorage</h3>
+<p>似乎localStorage也能解决状态共享的问题，但你不应该使用</p>
+<ol>
+<li>
+<p><strong>与React的同步问题</strong>：直接在组件中读写Local Storage不会触发React的重新渲染。为了在数据变化时更新UI，必须结合React的状态管理（如<code>useState</code>或<code>useReducer</code>）来通知React进行更新。[<a href="https://www.google.com/url?sa=E&#x26;q=https%3A%2F%2Fwww.developerway.com%2Fposts%2Flocal-storage-instead-of-context">1</a>]</p>
+</li>
+<li>
+<p><strong>缺乏响应式</strong>：Local Storage本身不提供监听数据变化的能力。虽然浏览器提供了<code>storage</code>事件，但该事件只在其他标签页修改数据时触发，当前页面无法监听到自己的修改。</p>
+</li>
+<li>
+<p><strong>服务器端渲染（SSR）</strong>：Local Storage是浏览器API，在服务器端不可用，这会对需要SSR的应用造成问题</p>
+</li>
+</ol>
+<p>虽然可以将Local Storage与React的状态管理结合使用来实现数据持久化，但这通常会使实现变得更复杂和脆弱。因此，Local Storage应该用于其设计的目的——<strong>数据持久化</strong>，而不是作为React组件间共享状态的解决方案。对于组件间的状态共享，仍然应该使用Context、Redux或Zustand等专门的状态管理工具。</p>
+<hr>
+<h2 id="如何优雅的处理effect">如何优雅的处理Effect</h2>
+<p>useEffect的设计是契合React，相比于 jQuery 需要关注 DOM 操作过程，React 生来就只需要关注渲染结果，<strong>即在 React 中重要的是目的地，而不是过程</strong>。</p>
+<p>这也是useEffect采用同步的心智模型，摈弃生命周期模型的原因</p>
+<p>从DX的角度似乎又是 <strong>We’re just “appeasing React”是 React 在给我们提效，而是我们在给 React 当牛马</strong>。但是 Dan 提到了一个很重要的观点：</p>
+<p><strong>useEffect 的设计迫使我们要注意到数据流中的变化，并思考我们的 Effect 应该如何同步它，而不是忽略它，否则我们产品的真实用户可能会遇到因此产生的 Bug。</strong></p>
+<p>首先，尽量减少Effect的使用是最好的使用原则，和state一样：</p>
+<p>在Tanstack Query中管理服务端状态，在Store(redux,zustand,jotai…)中管理客户端状态，这意味着</p>
+<p><code>useEffect</code> 只用于：</p>
+<ul>
+<li>
+<p><strong>DOM 层副作用</strong></p>
+</li>
+<li>
+<p><strong>浏览器 API（如 localStorage、EventListener）</strong></p>
+</li>
+<li>
+<p><strong>store 初始化</strong></p>
+</li>
+</ul>
+<p><code>useEffect</code> <strong>不再用于：</strong></p>
+<ul>
+<li>
+<p>同步 state</p>
+</li>
+<li>
+<p>派生新 state</p>
+</li>
+<li>
+<p>计算或更新 store 内部状态</p>
+</li>
+</ul>
+<p>基本理解：把 <code>useEffect</code> 理解成<strong>监听依赖并执行回调的机制</strong></p>
+<p>一个理解代码很有用的思维模型，但不是本质</p>
+<p>关键区别：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制</th><th>说明</th></tr></thead><tbody><tr><td>🧠 <strong>不是实时监听（不是 Proxy）</strong></td><td>React 不会在依赖值变化那一刻立刻执行 effect，而是等到<strong>下一次渲染结束后</strong>再触发。</td></tr><tr><td>🪞 <strong>依赖值来自渲染快照（闭包）</strong></td><td>Effect 执行时，使用的依赖值、state、props 都是那次渲染的“闭包快照”。</td></tr><tr><td>🔄 <strong>依赖检查是浅比较</strong></td><td>React 用 <code>Object.is</code> 对依赖数组每个元素进行浅层比较。</td></tr><tr><td>🧹 <strong>每次重新执行前都会先执行 cleanup</strong></td><td>如果定义了返回函数（清理函数），在依赖变更或组件卸载时会先执行上一次的清理逻辑。</td></tr></tbody></table>
+<p><code>useEffect</code> 可以理解为：</p>
+<p><strong>“在每次渲染提交后，根据依赖数组的变化，执行或清理副作用”</strong>。</p>
+<p>它像“监听依赖”，但监听的不是变量本身，而是「渲染时依赖的值」。</p>
+<p>但在理解问题原因（比如闭包、异步、竞态）时，你要记得——<strong>它不是实时监听，而是基于渲染和提交的快照机制</strong>。</p>
+<p>按照react的想法，怎么写出最好的useEffect代码：</p>
+<ol>
+<li>
+<p><strong>依赖项上尽可能诚实，来避免stale closure，</strong>
+<strong>诚实如果会带来问题，那么就根据其他原则思考有没有更好的设计</strong></p>
+</li>
+<li>
+<p><strong>尽量避免在Effect内部的调用setState来同步变化，派生状态</strong></p>
+</li>
+</ol>
+<p><strong>考虑这个State能不能使用useMemo去掉</strong>
+<strong>考虑是否是服务端状态</strong>
+<strong>考虑是否能通过为组件设置Key重新挂载来进行初始化</strong></p>
+<ul>
+<li>
+<p><strong>如果必须在Effect内部使用setState，使用useReducer分发action，而不是直接调用</strong></p>
+</li>
+<li>
+<p><strong>2,3的内容就是客户端状态管理库的可以解决内容，状态的派生，同步，监听</strong></p>
+</li>
+<li>
+<p><strong>服务端状态使用Tanstack Query管理，而不是useEffect</strong></p>
+</li>
+<li>
+<p><strong>客户端状态可以使用空依赖进行初始化</strong></p>
+</li>
+<li>
+<p><strong>避免「不稳定依赖」：依赖每次渲染都会变的引用，使用useCallback/useMemo/React compiler将其记忆化</strong></p>
+</li>
+<li>
+<p><strong>使用useRef/useEffectEvent，将仅仅需要用来保持最新，而不触发重渲染的引用值</strong></p>
+</li>
+<li>
+<p><strong>检查是否需要useLayoutEffect，检查是否需要cleanup，检查是否能够拆分为多个useEffect</strong></p>
+</li>
+<li>
+<p><strong>减少这个恼火的hooks的使用</strong></p>
+</li>
+</ul>
+<hr>
+<h2 id="如何性能优化">如何性能优化</h2>
+<p>这里主要针对react应用特有的部分</p>
+<p>性能分析，使用Chrome DevTools中的</p>
+<ul>
+<li>
+<p><strong>Lighthouse:</strong> 一个很好的入门工具，可以提供性能得分、关键指标数据以及改进建议。</p>
+</li>
+<li>
+<p><strong>Performance面板:</strong> 提供更详细的加载过程分析，包括：</p>
+<ul>
+<li>
+<p><strong>网络瀑布图 (Network):</strong> 显示所有资源的下载过程，并能识别渲染阻塞资源。</p>
+</li>
+<li>
+<p><strong>主线程活动 (Main):</strong> 展示HTML解析、JavaScript执行和布局等任务的耗时。</p>
+</li>
+<li>
+<p><strong>时间线截图 (Screenshots):</strong> 直观地展示页面在加载过程中的变化。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>优化性能的手段：</p>
+<p>最重要的一点就是合理正确的状态设计，减少<strong>“不必要的渲染”</strong></p>
+<p><strong>什么时候组件会重新渲染？</strong>当 <code>props</code>、<code>state</code>、<code>context</code> 改变时。</p>
+<p><strong>渲染的代价是什么？</strong> Diff + Fiber 构建 + Virtual DOM → DOM 操作。</p>
+<ol>
+<li>
+<p>减少state</p>
+</li>
+<li>
+<p>正确使用useEffect</p>
+</li>
+<li>
+<p>避免广泛使用Context，使用了则要注意进行记忆化，或者引入外部store</p>
+</li>
+<li>
+<p>记忆化（或使用react Compiler），memo高阶组件避免重复渲染，useMemo避免重复计算，useCallback避免重复生成函数，但不应该滥用</p>
+</li>
+<li>
+<p><code>key</code> 稳定性，避免不必要的卸载重建</p>
+</li>
+<li>
+<p>用Tanstack Query处理网络异步请求</p>
+</li>
+</ol> </div> </article>  </main> </body></html>

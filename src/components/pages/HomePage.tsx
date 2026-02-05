@@ -98,7 +98,7 @@ export default function HomePage({ baseUrl }: HomePageProps): ReactNode {
                   CandieCore
                 </div>
                 <div className="mt-4 text-base text-slate-500 sm:mt-6 sm:text-lg">
-                  Love Creating
+                  Love Creating ｜ althorchxr@gmail.com
                 </div>
                 <div className="mt-6 flex flex-col gap-3 font-mono sm:mt-14 sm:gap-6 lg:mt-20">
                   {profileLinks.map((link) => (

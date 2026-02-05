@@ -4,12 +4,26 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  image?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: Date | string;
+  tags?: string[];
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
-const pageTitle = title ? `${title} | CdCore's Blog` : "CdCore's Blog";
+const { title, description, canonical, image, ogType, publishedTime, tags, noindex } =
+  Astro.props;
+
+const normalizedTitle = typeof title === 'string' && title.trim().length ? title.trim() : undefined;
+const normalizedDescription =
+  typeof description === 'string' && description.trim().length
+    ? description.trim()
+    : undefined;
+
+const pageTitle = normalizedTitle ? `${normalizedTitle} | CdCore's Blog` : "CdCore's Blog";
 const pageDescription =
-  description ?? '记录技术成长、分享生活感悟、探索思维边界';
+  normalizedDescription ?? '记录技术成长、分享生活感悟、探索思维边界';
 const baseUrl = import.meta.env.BASE_URL;
 const normalizeBase = (value: string) => (value.endsWith('/') ? value : `${value}/`);
 const withBase = (path: string) => {
@@ -18,6 +32,56 @@ const withBase = (path: string) => {
   return `${normalizedBase}${normalizedPath}`;
 };
 const homeHref = import.meta.env.DEV ? '/CandyCoreBlog' : withBase('/');
+
+const canonicalUrl =
+  canonical ??
+  (Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.toString());
+
+const ogImagePath = image ?? '/kumiko.jpg';
+const ogImageUrl = Astro.site
+  ? new URL(withBase(ogImagePath), Astro.site).toString()
+  : withBase(ogImagePath);
+
+const resolvedOgType = ogType ?? 'website';
+const publishedISO = publishedTime ? new Date(publishedTime).toISOString() : undefined;
+const rssUrl = Astro.site ? new URL(withBase('/rss.xml'), Astro.site).toString() : withBase('/rss.xml');
+
+const identityUrl = Astro.site ? new URL(withBase('/'), Astro.site).toString() : withBase('/');
+const websiteSchema = Astro.site
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: "CdCore's Blog",
+      url: identityUrl,
+      inLanguage: 'zh-Hans',
+    }
+  : undefined;
+
+const pageSchema =
+  resolvedOgType === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: normalizedTitle ?? "CdCore's Blog",
+        description: pageDescription,
+        url: canonicalUrl,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+        inLanguage: 'zh-Hans',
+        ...(publishedISO ? { datePublished: publishedISO } : {}),
+        ...(tags?.length ? { keywords: tags.join(', ') } : {}),
+        image: [ogImageUrl],
+        author: { '@type': 'Person', name: 'CdCore', url: identityUrl },
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: pageTitle,
+        description: pageDescription,
+        url: canonicalUrl,
+        inLanguage: 'zh-Hans',
+      };
+
+const schemas = [websiteSchema, pageSchema].filter(Boolean);
 
 const navCandidates = [
   { label: 'Notes', path: '/notes' },
@@ -47,6 +111,45 @@ const navLinks = navCandidates.map((link) => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
+      <meta name="author" content="CdCore" />
+      <meta
+        name="robots"
+        content={noindex ? 'noindex, nofollow' : 'index, follow'}
+      />
+      <link rel="canonical" href={canonicalUrl} />
+
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:type" content={resolvedOgType} />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:site_name" content="CdCore's Blog" />
+      <meta property="og:locale" content="zh_CN" />
+      <meta property="og:image" content={ogImageUrl} />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDescription} />
+      <meta name="twitter:image" content={ogImageUrl} />
+
+      {resolvedOgType === 'article' && publishedISO ? (
+        <meta property="article:published_time" content={publishedISO} />
+      ) : null}
+      {resolvedOgType === 'article' && tags?.length
+        ? tags.map((tag) => <meta property="article:tag" content={tag} />)
+        : null}
+
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="CdCore's Blog RSS"
+        href={rssUrl}
+      />
+
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(schemas)}
+        is:inline
+      />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
       <link

@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="zh-Hans" class="bg-background text-foreground"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>html渲染策略 | CdCore&#39;s Blog</title><meta name="description" content="记录技术成长、分享生活感悟、探索思维边界"><meta name="author" content="CdCore"><meta name="robots" content="index, follow"><link rel="canonical" href="https://cdhxr.github.io/CandyCoreBlog/notes/html%E6%B8%B2%E6%9F%93%E7%AD%96%E7%95%A5"><meta property="og:title" content="html渲染策略 | CdCore's Blog"><meta property="og:description" content="记录技术成长、分享生活感悟、探索思维边界"><meta property="og:type" content="article"><meta property="og:url" content="https://cdhxr.github.io/CandyCoreBlog/notes/html%E6%B8%B2%E6%9F%93%E7%AD%96%E7%95%A5"><meta property="og:site_name" content="CdCore's Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="html渲染策略 | CdCore's Blog"><meta name="twitter:description" content="记录技术成长、分享生活感悟、探索思维边界"><meta name="twitter:image" content="https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"><meta property="article:published_time" content="2025-12-08T07:50:00.000Z"><link rel="alternate" type="application/rss+xml" title="CdCore's Blog RSS" href="https://cdhxr.github.io/CandyCoreBlog/rss.xml"><script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","name":"CdCore's Blog","url":"https://cdhxr.github.io/CandyCoreBlog/","inLanguage":"zh-Hans"},{"@context":"https://schema.org","@type":"BlogPosting","headline":"html渲染策略","description":"记录技术成长、分享生活感悟、探索思维边界","url":"https://cdhxr.github.io/CandyCoreBlog/notes/html%E6%B8%B2%E6%9F%93%E7%AD%96%E7%95%A5","mainEntityOfPage":{"@type":"WebPage","@id":"https://cdhxr.github.io/CandyCoreBlog/notes/html%E6%B8%B2%E6%9F%93%E7%AD%96%E7%95%A5"},"inLanguage":"zh-Hans","datePublished":"2025-12-08T07:50:00.000Z","image":["https://cdhxr.github.io/CandyCoreBlog/kumiko.jpg"],"author":{"@type":"Person","name":"CdCore","url":"https://cdhxr.github.io/CandyCoreBlog/"}}]</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap"><link rel="icon" type="image/jpeg" href="/CandyCoreBlog/kumiko.jpg"><link rel="prefetch" href="/CandyCoreBlog/notes"><link rel="prefetch" href="/CandyCoreBlog/thoughts"><link rel="prefetch" href="/CandyCoreBlog/blog"><link rel="stylesheet" href="/CandyCoreBlog/_astro/_slug_.BoJbkLhB.css"></head> <body class="min-h-screen bg-background text-foreground"> <header class="sticky top-0 z-50 bg-background/80 backdrop-blur"> <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4"> <a href="/CandyCoreBlog/" class="text-base font-semibold sm:text-lg">CdCore's Blog</a> <nav class="flex items-center gap-6 text-xs md:text-sm"> <a class="hover:text-primary" href="/CandyCoreBlog/notes" rel="prefetch" aria-current="page"> Notes </a><a class="hover:text-primary" href="/CandyCoreBlog/thoughts" rel="prefetch"> Thoughts </a><a class="hover:text-primary" href="/CandyCoreBlog/blog" rel="prefetch"> Blogs </a> </nav> </div> </header> <main class="min-h-[calc(100vh-80px)]">  <article class="mx-auto w-full max-w-4xl px-6 py-12"> <div class="mb-8"> <h1 class="text-3xl font-bold"> html渲染策略 </h1> <p class="mt-2 text-sm text-muted-foreground"> 2025/12/8 </p> </div> <div class="markdown"> <h2 id="现代混合页面"><strong>现代混合页面</strong></h2>
+<p>随着技术发展，静态与动态的界限逐渐模糊：</p>
+<ol>
+<li>
+<p><strong>静态页面的动态化</strong></p>
+<ol>
+<li>通过 JavaScript（如 React/Vue）实现客户端动态交互。</li>
+<li>结合 API 调用（如 RESTful API、GraphQL）从后端获取数据（如 JAMstack 架构）。</li>
+</ol>
+</li>
+<li>
+<p><strong>动态页面的静态化</strong></p>
+<ol>
+<li>使用服务端渲染（SSR）或静态站点生成器预渲染动态内容（如 Next.js、Nuxt.js）。</li>
+<li>通过增量静态生成（ISR）实现内容按需更新（如 Vercel 的 Next.js 方案）。</li>
+</ol>
+</li>
+</ol>
+<h2 id="theo的视频">theo的视频</h2>
+<p><a href="https://www.youtube.com/watch?v=Cifkb-ZVps4">https://www.youtube.com/watch?v=Cifkb-ZVps4</a></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="5910" height="4640" src="/CandyCoreBlog/_astro/file-20251208155153967.BGGlE2-U_RjxkF.webp" ></p>
+<h1 id="classic-mpa">Classic MPA</h1>
+<p>经典多页应用</p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="697" height="397" src="/CandyCoreBlog/_astro/file-20251208155622079.CYHptM11_Z95s6B.webp" ></p>
+<ul>
+<li>User向Server发送URL请求</li>
+<li>Server找到HTML文件，如果是非静态页面，则会返回一个接受参数，生成HTML文件的函数</li>
+<li>返回full HTML文件</li>
+</ul>
+<p>要点是，HTML文件被创建的时机：</p>
+<ul>
+<li>要么是在请求服务器之前</li>
+<li>要么在请求的时候</li>
+</ul>
+<p>服务器要么有整个page，要么要生成整个page
+用户不操作，就不会有任何流量，没有任何通信</p>
+<h1 id="classic-spa">Classic SPA</h1>
+<p>经典单页应用</p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="717" height="542" src="/CandyCoreBlog/_astro/file-20251208155758280.Bye5fOtd_Z1qpT6v.webp" ></p>
+<p>通过URL只会返回一个HTML骨架文件，不会像MPA那样返回完整的HTML文件</p>
+<ul>
+<li>返回带着js标签的HTML骨架文件</li>
+<li>浏览器再向Server请求js文件</li>
+<li>浏览器得到js文件，解析并运行js文件，向API发出请求</li>
+<li>Server返回json数据</li>
+<li>浏览器使用json创建出完整的HTML</li>
+</ul>
+<p>在上述的流程完成后，用户点击了链接，
+不会像MPA那样只在浏览器顶部有一个缓慢的进度条，作为点击链接等待的反馈
+而是浏览器立刻切换HTML进行页面切换</p>
+<p>如果使用了React Router或者一些路由系统，它会将UI组件与URL绑定
+进行页面切换，渲染新的组件，内部可能存在新的请求，重复下面的步骤</p>
+<ul>
+<li>浏览器得到js文件，解析并运行js文件，向API发出请求</li>
+<li>Server返回json数据</li>
+<li>浏览器使用json创建出完整的HTML</li>
+</ul>
+<p>不同的是，此时的Loading可以是一个Loading spinner，并且部分内容立刻就能渲染，而不是MPA那样只能等待浏览器的加载条</p>
+<h2 id="缺陷">缺陷</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="881" height="618" src="/CandyCoreBlog/_astro/file-20251208155850070.LQ3h3jPv_ZC3Yn9.webp" ></p>
+<p>用户点击的下半部分确实对MPA的体验进行很多优化
+而问题在于上半部分，除非做完上半部分的工作，用户是不能看到正确的HTML内容的</p>
+<p><strong>经典SPA的优点和缺点</strong>：</p>
+<ul>
+<li>
+<p><strong>首次加载慢</strong>：由于需要经过多次请求（HTML -> JS -> API数据 -> 客户端渲染）才能显示页面，SPA的首次加载速度通常较慢。在某些情况下，可能需要发送几十个请求才能显示内容。</p>
+</li>
+<li>
+<p><strong>导航更快</strong>：一旦JavaScript加载完毕，用户在SPA内部点击链接时，浏览器可以直接生成新的UI，而无需等待服务器发送完整的HTML页面，这使得内部导航感觉更即时、流畅</p>
+</li>
+</ul>
+<h1 id="ssrs-spa">SSR’s SPA</h1>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1280" height="810" src="/CandyCoreBlog/_astro/file-20251208155916536.DbLp4slL_Z1BoQz0.webp" ></p>
+<p>Server side rendering的想法是
+为了避免 <strong>经典SPA</strong> 首屏加载问题，</p>
+<ol>
+<li><strong>服务器渲染</strong>：与发送空HTML不同，SSR SPA在服务器上运行渲染代码（例如React），生成<strong>完整的HTML</strong>页面。这意味着服务器会根据请求，生成包含所有内容和数据的HTML，并将其立即发送给用户。</li>
+<li>此时browser也能知道HTML中的js tag，会并行的获取js解析js运行js，但不用再获取数据了</li>
+<li>但是服务器在渲染HTML时，通常会将页面所需的数据嵌入到HTML中，这样客户端就不需要再次发出API请求来获取数据。例如，Next.js会将数据嵌入到<code>next-data</code>属性中。</li>
+<li><strong>Hydration</strong></li>
+</ol>
+<p>React code做的就是生成HTML文件，在这个过程中进行事件绑定和交互逻辑，而如果客户端已经有了完整的HTML，React怎么知道按钮对应哪个onclick呢？</p>
+<p>解决此问题的这个过程称为<strong>Hydration（注入水分，水合，注水激活）</strong>
+它将在客户端上重新运行一遍相同的React code</p>
+<p>React code会跑两次</p>
+<ul>
+<li>在Server会跑一次用于返回完整的HTML</li>
+<li>在Client会跑一次用于事件绑定和交互逻辑</li>
+</ul>
+<p>（涉及React的底层原理）</p>
+<p>当客户端的JavaScript加载并运行后，它会重新运行相同的渲染代码，将事件监听器和交互逻辑绑定到已经存在的HTML元素上。</p>
+<p>这个过程被称为“水合”。通过水合，客户端的JavaScript可以接管页面，使其具备交互性。</p>
+<h2 id="优点">优点</h2>
+<p>在水合结束后，所有的js内容已经加载了，所以不再需要通过服务器生成整个界面，它只需要获取数据部分</p>
+<p>所以直接访问数据库就行了</p>
+<p>这意味着，他与classic SPA相比，</p>
+<ul>
+<li>可以直接得到完整的HTML，优化首屏加载速度</li>
+<li>保持了SPA立刻可以显示一些不需要数据的html的优点</li>
+<li>还对获取数据的过程做了简化</li>
+</ul>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1154" height="218" src="/CandyCoreBlog/_astro/file-20251208160253505.aU2F_q6i_r9LAG.webp" ></p>
+<ul>
+<li>
+<p>另外SPA还可以使数据持久话，让相同的内容可以轻易的在不同的page间共享，因为它没有进行浏览器的导航</p>
+<ul>
+<li>例子就是，小窗播放的功能，需要SPA对数据的持久化，才能轻易的实现</li>
+</ul>
+</li>
+</ul>
+<h2 id="缺陷-1">缺陷</h2>
+<ul>
+<li>水合（Hydration）成本：服务端渲染的 HTML 需在客户端重新绑定交互逻辑，这会导致在此之前，我们的按钮之类的东西是不能用的 有些框架，比如qwik在处理这点</li>
+<li>数据冗余：会重新发送一些已经存在的数据，导致html里面一份，js里面一份</li>
+<li>SEO 优化不好，因为他们并不会去运行js，他们只会看看你html里面有什么</li>
+</ul>
+<p>然而，nextjs的工作方式是，它会阻塞整个界面，直到其拿到最后一步的json blob</p>
+<p>所以在过去的nextjs，page router模式下，你在点击链接后，只能等待整个过程走完（拿到json blob）之后，才能显示内容</p>
+<p>我们期待的体验是，在点击链接后，先在数据无关的部分渲染了，并行的获取数据，拿到数据后再渲染剩余的依赖数据部分</p>
+<p>由于这种阻塞的情况，当你把所有数据都使用这样的SPA来解决时，获取数据会变慢，所有事情都在客户端处理，大量的数据又会阻塞navigation</p>
+<p>那么我们如何解决这个问题？</p>
+<h1 id="isomorphic-ssr">Isomorphic SSR</h1>
+<p>SPA-influenced Isomorphic 同构SSR</p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1280" height="569" src="/CandyCoreBlog/_astro/file-20251208160334785.B4Qbsl82_ZprvhA.webp" ></p>
+<p>同构体现在，同一份代码在服务器和客户端上以不同方式运行，</p>
+<p>这意味着开发者可以编写一份代码，部分只在服务器上运行，部分只在客户端运行，而另一部分可以同时在两端运行，但运行方式不同</p>
+<ul>
+<li>
+<p><strong>核心改进与工作原理</strong> :</p>
+<ul>
+<li>
+<p><strong>非阻塞导航与流式HTML块</strong>：这是同构SSR的关键优势。通过使用像React <code>Suspense</code> 这样的机制，开发者可以指定页面中某些部分（如数据加载中的内容）不应阻塞页面的初始渲染或导航。</p>
+<ul>
+<li>当用户点击链接进行导航时，<strong>客户端可以立即显示一个加载状态（通过<code>Suspense</code></strong> 的<strong><code>fallback</code></strong> ），而无需等待服务器完全准备好所有内容 。</li>
+<li>与此同时，服务器不会重新生成整个页面，而是<strong>只生成那些发生变化的HTML“块”（chunks）</strong>，并以流（stream）的形式发送到浏览器。</li>
+<li>浏览器接收到这些HTML块后，会用它们替换掉之前显示的加载状态，从而逐步填充页面内容 [2]。</li>
+</ul>
+</li>
+<li>
+<p><strong>减少数据传输和JavaScript包大小</strong>:</p>
+<ul>
+<li>服务器组件（Server Components）等技术允许大部分渲染逻辑和数据获取在服务器端完成，并直接发送HTML，而不是发送包含所有可能UI状态的巨大JavaScript文件和JSON数据。</li>
+<li>这意味着<strong>很多只需要在服务器上运行的JavaScript代码不再需要传输到客户端</strong>，从而减少了客户端JS包的大小和数据重复问题 [2]。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>优点</strong> :</p>
+<ul>
+<li><strong>即时导航体验</strong>：用户点击链接后几乎立即看到响应（可能是加载状态），大大提升了感知性能 。</li>
+<li><strong>HTML优先的开发</strong>：结合了MPA的HTML优先渲染优势，提供完整的HTML内容，对SEO友好，同时享受SPA的动态交互。</li>
+<li><strong>优化的开发者体验</strong>：开发者可以在服务器和客户端之间灵活地划分组件，无需在两种模式之间进行权衡。</li>
+<li><strong>降低客户端JS负担</strong>：将复杂的渲染逻辑和大量数据移至服务器处理，减轻了客户端浏览器的负担，特别是对于包含大量动态内容的页面 。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺点</strong> :</p>
+<ul>
+<li>
+<p><strong>无法使用静态CDN托管完整HTML</strong>：由于页面内容（尤其是动态部分）是在服务器端实时生成的，因此不能像经典SPA或静态MPA那样简单地将完整的HTML文件缓存到CDN上 。<strong>每个请求都需要服务器端JavaScript来生成页面</strong> 。</p>
+</li>
+<li>
+<p><strong>复杂的后端需求</strong>：这种模式要求在服务器端运行React（或类似框架）代码来解析和生成整个网站的HTML。对于一些前端团队来说，这可能意味着需要涉足后端基础设施，或者现有后端架构（例如使用Go语言的API）需要进行调整。</p>
+</li>
+<li>
+<p><strong>基础设施复杂性</strong>：为了实现快速的静态部分响应和动态部分的流式传输，可能需要复杂的边缘工作者（Edge Worker）基础设施来实现部分预渲染（Partial Pre-rendering）。这可能需要专门的平台（如Vercel）支持，或者需要前端开发人员具备深厚的DevOps/基础设施知识。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="mpa-influenced-split-excutionislandsserver-components">MPA-influenced split-excution(Islands/Server Components)</h1>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="901" height="254" src="/CandyCoreBlog/_astro/file-20251208160457434.pXJq0bB9_Z1i7Vjf.webp" ></p>
+<p>MPA-influenced split-execution（多页应用影响下的分割执行）模型是当今网络应用渲染策略的一种演进，它与同构 SSR（服务器端渲染）模型类似，但解决了一些不同的问题。</p>
+<p>以下是该模型的详细介绍：</p>
+<p><strong>核心概念与原理</strong> MPA-influenced split-execution 的核心思想是<strong>“岛屿（Islands）”架构</strong>。在这种模式下，页面的大部分内容是静态的，可以像传统多页应用一样被静态托管，而只有少数动态、交互式的部分被视为“岛屿”。</p>
+<ul>
+<li>
+<p><strong>静态内容优先</strong>：页面的主要骨架和非动态内容会生成为静态 HTML 文件。这意味着你可以将这些文件部署在静态 CDN（内容分发网络）上，如 S3，从而实现页面<strong>几乎即时</strong>的加载速度。用户在导航到页面时，会立即看到页面的大部分静态内容。</p>
+</li>
+<li>
+<p><strong>动态“岛屿”</strong>：页面中的动态部分（例如用户的购物车内容）会被标记为“岛屿”。这些岛屿在初始加载的静态 HTML 中通常是空的或带有占位符。</p>
+</li>
+<li>
+<p><strong>嵌入式 JavaScript</strong>：一旦静态 HTML 加载完成，一小段<strong>嵌入式 JavaScript</strong> 就会在客户端运行。这段 JavaScript 的作用是扫描页面，识别出所有的动态岛屿。</p>
+</li>
+<li>
+<p><strong>按需获取动态内容</strong>：对于每个识别出的岛屿，该嵌入式 JavaScript 会向服务器（例如 <code>api.example.com</code> 或 Astro 服务器运行时）发起一个网络请求，以获取该岛屿所需的<strong>动态 HTML 内容</strong>。服务器会根据请求（可能包含用户的 cookie 等信息）生成相应的 HTML 片段，并直接将其发送回浏览器。</p>
+</li>
+<li>
+<p><strong>客户端注入</strong>：浏览器接收到这些 HTML 片段后，嵌入式 JavaScript 会将其插入到页面中对应的岛屿位置，从而完成页面的渲染。</p>
+</li>
+<li>
+<p><strong>加载流程示例</strong> 以访问 <code>amazon.com/cart</code> 为例，其加载流程如下：</p>
+</li>
+</ul>
+<ol>
+<li>用户访问 <code>amazon.com/cart</code>。</li>
+<li>服务器立即发送一个<strong>预生成的（几乎完整）HTML 文件</strong>给用户，该文件包含页面所有静态部分。用户几乎可以立即看到页面内容，但动态岛屿部分（如购物车）是空的或带有占位符。</li>
+<li>一小段<strong>嵌入式 JavaScript</strong> 在浏览器中运行。</li>
+<li>该 JavaScript 识别出购物车岛屿，并向服务器（例如 Astro 服务器运行时）发送请求，以获取购物车的动态内容。</li>
+<li>Astro 服务器运行时可能会查询数据库以获取用户的购物车数据（JSON 格式）。</li>
+<li>服务器根据数据生成<strong>购物车的 HTML 内容</strong>，并将其直接发送回浏览器。</li>
+<li>浏览器中的 JavaScript 将接收到的 HTML 片段注入到购物车的岛屿位置，用户最终看到完整的页面。</li>
+</ol>
+<p><strong>优势</strong> 这个模型旨在融合传统多页应用和单页应用的优点：</p>
+<ul>
+<li>
+<p><strong>第一页加载速度快</strong>：由于大部分内容可以从静态 CDN 加载，用户在首次打开页面时无需等待服务器生成完整页面，显著提升了加载速度，避免了服务器冷启动等问题。</p>
+</li>
+<li>
+<p><strong>更好的用户体验</strong>：用户点击链接时，页面的静态部分会<strong>即时响应</strong>，提供即时反馈，就像代码在本地运行一样。</p>
+</li>
+<li>
+<p><strong>动态内容在服务器生成</strong>：关键的动态部分在服务器上生成，避免了单页应用中大量 JavaScript 在客户端解析、运行、多次 API 调用、渲染组件的复杂且耗时的过程。这减少了发送到客户端的 JavaScript 文件大小，因为无需包含所有可能的 UI 状态和渲染逻辑。</p>
+</li>
+<li>
+<p><strong>降低基础设施复杂性</strong>：与需要智能边缘工作器（Edge Worker）的预渲染模型（如 Vercel/Next.js）相比，MPA-influenced split-execution 模型的基础设施<strong>显著简化</strong>。静态部分可以托管在 S3 等简单存储服务上，而动态部分可以由简单的 Node 服务器或 Lambda 函数处理。</p>
+</li>
+<li>
+<p> <strong>SEO 友好</strong>：由于初始 HTML 包含大量实际内容，这对于搜索引擎爬虫非常有利，因为它们主要查看 HTML 内容而不是执行 JavaScript。</p>
+</li>
+</ul>
+<p><strong>潜在缺点和权衡</strong></p>
+<ul>
+<li>
+<p><strong>动态内容加载非同时</strong>：与一些高级的边缘工作器模型不同，该模型<strong>无法同时</strong>启动静态 HTML 的传输和动态内容的生成。客户端必须先接收到静态 HTML，然后嵌入式 JavaScript 才能发起对动态岛屿内容的请求。这意味着动态内容的显示会有轻微的延迟。</p>
+</li>
+<li>
+<p><strong>前端团队需具备后端知识</strong>：为了实现服务器端动态内容的生成，前端开发人员可能需要更深入地了解后端代码和服务器运行环境。</p>
+</li>
+<li>
+<p><strong>无法缓存整个页面</strong>：动态岛屿的存在意味着整个 HTML 文件不能完全静态化并缓存在 CDN 上，因为它会根据用户请求动态生成部分内容。</p>
+</li>
+</ul>
+<p>总之，MPA-influenced split-execution 模型提供了一种<strong>折衷方案</strong>，它在保持即时首屏加载速度的同时，允许服务器按需渲染动态内容，从而优化了用户体验和开发效率。</p>
+<h1 id="期待的效果">期待的效果</h1>
+<h2 id="三个主要目标"><strong>三个主要目标</strong></h2>
+<ol>
+<li>
+<p><strong>即时页面切换体验</strong></p>
+<ul>
+<li>用户点击链接后，页面应该<strong>瞬间更新</strong>，不能出现“点击了但不知道有没有反应”的情况。</li>
+<li>希望像单页应用（SPA）一样，导航过程流畅。</li>
+</ul>
+</li>
+<li>
+<p><strong>客户端交互灵活</strong></p>
+<ul>
+<li>能在客户端实现复杂交互，例如<strong>弹出视频播放器在页面切换时不消失</strong>。</li>
+<li>避免因为刷新整个页面而丢失组件状态。</li>
+</ul>
+</li>
+<li>
+<p><strong>首屏加载不依赖服务器渲染</strong></p>
+<ul>
+<li>不想等待服务器生成页面（SSR）后再展示，尤其是在<strong>无服务器（Serverless）+冷启动</strong>的场景下，可能要几秒才能开始响应。</li>
+<li>希望用户能<strong>立即看到内容</strong>，而不是先等待 HTML + 数据生成。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="额外的需求"><strong>额外的需求</strong></h2>
+<ul>
+<li>某些<strong>动态部分仍需要服务器生成</strong>（比如个性化数据）。</li>
+<li>但又<strong>不想走传统 SPA 那种模式</strong>：HTML加载→解析JS→JS请求数据→渲染→发现还要请求更多数据→继续等待。（动态内容在Server side）</li>
+</ul>
+<hr>
+<h2 id="核心矛盾"><strong>核心矛盾</strong></h2>
+<ul>
+<li>如果页面是<strong>纯静态</strong>（CDN缓存），切换快，但动态部分就没法 SSR。</li>
+<li>如果动态部分放在服务器端渲染，就必须等服务器生成完整 HTML，这会阻塞页面显示。</li>
+<li>目标是既要<strong>SSR动态部分</strong>，又要<strong>不影响首屏加载速度和流畅导航</strong>，但这两者“天然对立”。</li>
+</ul> </div> </article>  </main> </body></html>
