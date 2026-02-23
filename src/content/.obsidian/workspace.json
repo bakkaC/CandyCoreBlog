@@ -4,103 +4,91 @@
     "type": "split",
     "children": [
       {
-        "id": "7ef764dbc7ec9fc0",
+        "id": "d7d9cd601e87bbbf",
         "type": "tabs",
         "children": [
           {
-            "id": "9d8eadf0d2305830",
+            "id": "80d6a6125e80aa7e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "thoughts/状态管理库与组件解耦.md",
+                "file": "blogs/瞎想/解决问题与解释问题.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "状态管理库与组件解耦"
+              "title": "解决问题与解释问题"
             }
           },
           {
-            "id": "eec6dec82e3d978d",
+            "id": "ec6c1090501a65cf",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blogs/「 百米 」观后感.md",
+                "file": "notes/Promise的拆解.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "「 百米 」观后感"
+              "title": "Promise的拆解"
             }
           },
           {
-            "id": "1c36bfe2868da588",
+            "id": "10583679f19f49f5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "thoughts/React并发模式原理与应用.md",
+                "file": "notes/Promise的拆解.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "React并发模式原理与应用"
+              "title": "Promise的拆解"
             }
           },
           {
-            "id": "b3d3f10987293af9",
+            "id": "81c07c382f7b083e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "thoughts/react设计策略与哲学.md",
+                "file": "blogs/瞎想/解决问题与解释问题.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "react设计策略与哲学"
+              "title": "解决问题与解释问题"
             }
           },
           {
-            "id": "36eae9b09b785dae",
+            "id": "6206e03e7acf4de6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/计算机网络（层级，协议，DNS，CDN，CORS）.md",
+                "file": "notes/八股/closure 闭包.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "计算机网络（层级，协议，DNS，CDN，CORS）"
+              "title": "closure 闭包"
             }
           },
           {
-            "id": "9604d0601b8451f6",
+            "id": "628bf2f3e04dbad9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "未命名.md",
+                "file": "notes/react Rendering strategy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "未命名"
-            }
-          },
-          {
-            "id": "8cbc189e4c79ee3e",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "notes/八股/assets/apply，bind，new，prototype chain，object，Scope/file-20260210115331922.png"
-              },
-              "icon": "lucide-image",
-              "title": "file-20260210115331922"
+              "title": "react Rendering strategy"
             }
           }
         ],
@@ -263,7 +251,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -281,52 +270,51 @@
   },
   "active": "adce2d0c460692ca",
   "lastOpenFiles": [
-    "assets/失恋-花-电锯",
-    "assets/「 百米 」观后感",
-    "assets",
-    "thoughts/图像批量裁剪的性能优化.md",
-    "未命名",
-    "thoughts/assets/图像批量裁剪的性能优化/file-20260212211611209.png",
-    "未命名.md",
-    "notes/八股/apply，bind，new，prototype chain，object，Scope....md",
-    "notes/八股/assets/apply，bind，new，prototype chain，object，Scope/file-20260210115244657.png",
-    "notes/八股/assets/apply，bind，new，prototype chain，object，Scope/file-20260210115331922.png",
-    "notes/计算机网络（层级，协议，DNS，CDN，CORS）.md",
-    "notes/八股/assets/apply，bind，new，prototype chain，object，Scope/file-20260210115229853.png",
-    "notes/八股/assets/apply，bind，new，prototype chain，object，Scope/file-20260210115224580.png",
-    "notes/八股/assets/apply，bind，new，prototype chain，object，Scope",
-    "notes/assets/计算机网络（层级，协议，DNS，CDN，CORS）/file-20260209175038439.png",
-    "notes/assets/计算机网络（层级，协议，DNS，CDN，CORS）/file-20260209175013470.png",
-    "notes/assets/计算机网络（层级，协议，DNS，CDN，CORS）",
-    "thoughts/assets/rsc-nextjs/file-20251208161755689-1.png",
-    "thoughts/assets/rsc-nextjs/file-20251208161755691-1.png",
-    "thoughts/assets/rsc-nextjs/file-20251208161755692-1.png",
-    "thoughts/RSC & Nextjs.md",
-    "thoughts/assets/rsc-nextjs",
-    "thoughts/rsc--nextjs.md",
-    "我为何因《超时空辉夜姬》流泪.md",
-    "notes/八股/js GC.md",
-    "notes/八股/simplified-setstate.md",
+    "notes/八股/计算机网络（层级，协议，DNS，CDN，CORS）.md",
     "notes/八股/发布订阅模式.md",
     "notes/八股/对象的深度遍历.md",
-    "notes/HTML渲染策略.md",
-    "notes/Promise的拆解.md",
-    "notes/react Rendering strategy.md",
-    "notes/style system.md",
+    "notes/八股/浏览器渲染过程.md",
+    "notes/八股/apply,bind,new,prototype chain,object,Scope....md",
+    "notes/八股/js GC.md",
+    "notes/AI concept.md",
+    "notes/assets/AI concept",
+    "Execution context 执行上下文.md",
+    "notes/八股/closure 闭包.md",
     "notes/前端工程化全史 1995-2025.md",
-    "notes/浏览器渲染过程.md",
-    "notes/assets/浏览器渲染过程",
-    "「 百米 」观后感.md",
-    "thoughts/react设计策略与哲学.md",
+    "thoughts/AI coding Best Practice.md",
+    "thoughts/立绘预览的时序问题.md",
+    "thoughts/图像批量裁剪的性能优化.md",
+    "thoughts/js函数队列性质.md",
     "thoughts/状态管理库与组件解耦.md",
+    "thoughts/react设计策略与哲学.md",
     "thoughts/React并发模式原理与应用.md",
     "thoughts/chatbox阅读记录.md",
-    "thoughts/AI coding Best Practice.md",
-    "失恋-花-电锯.md",
+    "notes/HTML渲染策略.md",
+    "notes/simplified-setstate.md",
+    "notes/assets/simplified-setstate",
+    "notes/八股/assets/浏览器渲染过程",
+    "notes/style system.md",
+    "notes/react Rendering strategy.md",
+    "notes/八股/assets/计算机网络（层级，协议，DNS，CDN，CORS）",
+    "notes/Promise的拆解.md",
+    "notes/八股/assets/closure 闭包",
+    "notes/八股/assets/closure 闭包/file-20260222225252343.png",
+    "assets/closure 闭包",
+    "notes/assets/AI concept/file-20260223173413325.png",
+    "notes/assets/AI concept/file-20260223173413326.png",
+    "notes/assets/AI concept/file-20260223173413328.png",
+    "notes/assets/AI concept/file-20260223173413330.png",
+    "notes/assets/AI concept/file-20260223173413330 1.png",
+    "notes/assets/AI concept/file-20260223173413331.png",
+    "notes/assets/AI concept/file-20260223173413332.png",
+    "notes/assets/AI concept/file-20260223173413333.png",
+    "notes/assets/AI concept/file-20260223173413334.png",
+    "assets/AI concept",
     "健康话题的思考.md",
-    "thoughts/assets/react设计策略与哲学",
-    "blogs/assets/「 百米 」观后感/assets",
-    "blogs/assets/「 百米 」观后感",
+    "blogs/瞎想/解决问题与解释问题.md",
+    "Excalidraw/批量裁剪.excalidraw.excalidraw",
+    "Excalidraw/assets/初识AI.excalidraw",
+    "blogs/瞎想/assets/解决问题与解释问题",
     "未命名.canvas"
   ]
 }

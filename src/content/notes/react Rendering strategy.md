@@ -3,6 +3,14 @@ description: ""
 date: 2025-12-08T15:46
 toc_max_heading_level: 4
 ---
+## 2026 2.14
+
+一次新的总结，发现看八股看自己准备的文章是方便的，阅读这篇的时候发现有很多细节的问题，于是重新以图的形式再总结了一遍
+
+![](assets/react%20Rendering%20strategy/file-20260214162041659.png)
+
+---
+
 讲解了整个过程发生了什么的总结
 
 代码实现可以看[Build your own fiber Tree](https://rx2wn2pd1qk.feishu.cn/wiki/VYdFwbnxdiYcJukUP5mcAAOVnsh)

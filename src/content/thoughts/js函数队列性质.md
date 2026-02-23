@@ -92,7 +92,7 @@ doC();
 
 ### setState —— 批处理执行
 
-[setState的机制](/notes/八股/simplified-setstate)
+[setState的机制](../notes/simplified-setstate.md)
 ### 批量裁剪——并发控制和限流
 
 [图像批量裁剪](/thoughts/图像批量裁剪的性能优化)
