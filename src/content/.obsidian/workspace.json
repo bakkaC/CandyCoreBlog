@@ -8,45 +8,45 @@
         "type": "tabs",
         "children": [
           {
-            "id": "80d6a6125e80aa7e",
+            "id": "e2a6279d87ae055b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blogs/瞎想/解决问题与解释问题.md",
+                "file": "面试准备.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "解决问题与解释问题"
+              "title": "面试准备"
             }
           },
           {
-            "id": "ec6c1090501a65cf",
+            "id": "a546dd7ed4ac5439",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Promise的拆解.md",
+                "file": "面试准备.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Promise的拆解"
+              "title": "面试准备"
             }
           },
           {
-            "id": "10583679f19f49f5",
+            "id": "3008eea07d88f6d7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Promise的拆解.md",
+                "file": "面试准备.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Promise的拆解"
+              "title": "面试准备"
             }
           },
           {
@@ -78,35 +78,19 @@
             }
           },
           {
-            "id": "628bf2f3e04dbad9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "thoughts/状态管理库与组件解耦.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "状态管理库与组件解耦"
-            }
-          },
-          {
             "id": "2944987a60942c8e",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "thoughts/乐观更新(tanstack query or local state).md",
-                "mode": "source",
-                "source": false
+                "file": "Excalidraw/ReactRrender.excalidraw.md"
               },
-              "icon": "lucide-file",
-              "title": "乐观更新(tanstack query or local state)"
+              "icon": "excalidraw-icon",
+              "title": "ReactRrender.excalidraw"
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -265,7 +249,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -281,15 +266,27 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "2944987a60942c8e",
+  "active": "3008eea07d88f6d7",
   "lastOpenFiles": [
-    "thoughts/状态管理库与组件解耦.md",
-    "thoughts/乐观更新(tanstack query or local state).md",
-    "notes/八股/对象的深度遍历.md",
-    "thoughts/立绘预览的时序问题.md",
-    "thoughts/AI coding Best Practice.md",
-    "notes/react Rendering strategy.md",
     "notes/八股/计算机网络（层级，协议，DNS，CDN，CORS）.md",
+    "notes/八股/HTTP.md",
+    "面试准备.md",
+    "thoughts/立绘预览的时序问题.md",
+    "thoughts/react设计策略与哲学.md",
+    "thoughts/rsc--nextjs.md",
+    "thoughts/乐观更新(tanstack query or local state).md",
+    "thoughts/状态管理库与组件解耦.md",
+    "thoughts/如何设计良好的react代码.md",
+    "thoughts/文档bug相关记录.md",
+    "thoughts/基于vite的代码拆分.md",
+    "thoughts/图像批量裁剪的性能优化.md",
+    "thoughts/React并发模式原理与应用.md",
+    "thoughts/AI coding Best Practice.md",
+    "thoughts/chatbox阅读记录.md",
+    "blogs/瞎想/解决问题与解释问题.md",
+    "Excalidraw/ReactRrender.excalidraw.md",
+    "notes/八股/对象的深度遍历.md",
+    "notes/react Rendering strategy.md",
     "notes/八股/发布订阅模式.md",
     "notes/八股/浏览器渲染过程.md",
     "notes/八股/apply,bind,new,prototype chain,object,Scope....md",
@@ -298,19 +295,9 @@
     "notes/assets/AI concept",
     "Execution context 执行上下文.md",
     "notes/八股/closure 闭包.md",
-    "notes/前端工程化全史 1995-2025.md",
-    "thoughts/图像批量裁剪的性能优化.md",
-    "thoughts/js函数队列性质.md",
-    "thoughts/react设计策略与哲学.md",
-    "thoughts/React并发模式原理与应用.md",
-    "thoughts/chatbox阅读记录.md",
-    "notes/HTML渲染策略.md",
-    "notes/simplified-setstate.md",
     "notes/assets/simplified-setstate",
     "notes/八股/assets/浏览器渲染过程",
-    "notes/style system.md",
     "notes/八股/assets/计算机网络（层级，协议，DNS，CDN，CORS）",
-    "notes/Promise的拆解.md",
     "notes/八股/assets/closure 闭包",
     "notes/八股/assets/closure 闭包/file-20260222225252343.png",
     "assets/closure 闭包",
@@ -324,8 +311,6 @@
     "notes/assets/AI concept/file-20260223173413333.png",
     "notes/assets/AI concept/file-20260223173413334.png",
     "assets/AI concept",
-    "健康话题的思考.md",
-    "blogs/瞎想/解决问题与解释问题.md",
     "Excalidraw/批量裁剪.excalidraw.excalidraw",
     "Excalidraw/assets/初识AI.excalidraw",
     "blogs/瞎想/assets/解决问题与解释问题",
