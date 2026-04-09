@@ -1,0 +1,161 @@
+---
+title: ESM 和 CJS
+date: 2026-02-25
+---
+
+## CJS
+
+以前写 JS 是这样引入文件的：
+
+```plain text
+<scriptsrc="./index.js"></script>
+<scriptsrc="./home.js"></script>
+<scriptsrc="./list.js"></script>
+```
+
+这些 JS 文件有一个特点：**所有变量都在同一个全局作用域里。**  
+显然会带来一些全局变量名污染的问题。
+
+可以用一个 **自执行匿名函数** 来创建一个独立作用域：
+
+```javascript
+var moduleA = (function(){
+  return {
+    name:'xxx'
+  }
+})()
+
+moduleA.name
+```
+
+这样：
+
+- `name` 只在这个函数内部存在
+- 不会污染全局变量
+
+但是，这导致了需要记录模块的名字，都要手动写匿名函数、定义对象，然后记忆对象名。
+
+为了解决这些问题，社区提出了 **模块化规范**：CommonJS。
+
+早期 JavaScript 没有模块化，多个 JS 文件共享全局变量，容易造成变量污染和依赖混乱。虽然可以用自执行函数解决作用域问题，但代码维护困难，因此后来出现了 CommonJS 规范来统一 JavaScript 的模块化开发。
+
+它规定：模块如何导出、引入、管理依赖，并且把函数包装的行为在运行时实现，使得每个文件都是独立的作用域，而跨作用域就需要使用 CommonJS 的写法。
+
+**Node** 是 `CommonJS` 在服务器端一个具有代表性的实现，CommonJS 的行为并不是 JS 原行为，而是在不同地方有不同的实现形式。
+
+符合该典型写法的就是 CommonJS：
+
+```javascript
+// 导出
+module.exports= {
+  name:'hello'
+}
+
+// 导入
+const moduleA = require('./moduleA')
+```
+
+这样：
+
+- 每个文件是 **独立模块**
+- 不会污染全局
+- 依赖关系清晰
+
+## ESM
+
+`Nodejs` 借鉴了 `Commonjs` 实现了模块化。从 `ES6` 开始，`JavaScript` 才真正意义上有自己的模块化规范。
+
+在 `Es Module` 中用 `export` 用来导出模块，`import` 用来导入模块。
+
+- 借助 `Es Module` 的静态导入导出的优势，实现了 `tree shaking`
+- `Es Module` 还可以 `import()` 懒加载方式实现代码分割
+
+**ES Module 在 JavaScript 规范里定义了一种新的作用域：Module Scope（模块作用域）**
+
+JS 现在有几种作用域：
+
+```plain text
+全局作用域 (Global Scope)
+函数作用域 (Function Scope)
+块级作用域 (Block Scope)
+模块作用域 (Module Scope)  ← ES Module 新增
+```
+
+每个模块都有自己的：
+
+```plain text
+Module Environment
+```
+
+所以变量默认只属于当前模块。  
+JavaScript 语言本身为每个模块创建了独立的 Module Scope，并且只能通过 `export / import` 共享变量。
+
+```javascript
+CJS = runtime module system
+ESM = compile-time module system
+```
+
+和 CJS 的关键差异：
+
+1. ESM 在语言层面扩展了作用域的类型，编译器可以直接理解，CJS 是依赖函数作用域
+2. ESM 是 **live binding**，关键点：**import 的变量会随着源模块变化而变化。**不是值拷贝
+3. ESM 是 **静态结构**，在 **编译阶段就知道依赖关系，可以 tree shaking**
+4. ESM 有 **循环依赖初始化顺序**
+
+Tree Shaking 是基于 AST 实现的，AST = 把代码变成“结构化的语法树”，解析代码 → AST，标记哪些 export 被使用，删除未使用代码（dead code elimination），有点像垃圾回收。
+
+## webpack vs vite
+
+webpack 是基于 cjs 的，vite 是基于 esm的，这带来了两者一些显著的差异
+
+- CJS 是运行时加载的，他的 require 位置不固定，所以必须执行代码才能知道文件在哪，也就是说， CJS 的模块解析能力（也就是通过 import 或者 require 找到文件的能力）必须通过提前解析好依赖
+- ESM 规定import 必须写在顶部，所以这是静态结构，所以支持编译时确定路径，这意味着：**不用执行代码，就能分析依赖关系**
+    - 这给了 esm 是浏览器原生理解支持的能力，当浏览器看到 import 代码时
+    - `import { sum } from './math.js'`
+    - 会自动做一件事：发起 HTTP 请求去加载 `math.js`
+
+也就是说：**模块加载从“构建时” → 变成了“运行时”**
+
+1. **开发阶段是否需要全量打包**
+
+因为 Webpack 要处理 CJS，所以为了浏览器有依赖关系，必须提前执行所有代码，必须构建 bundle，只能选择：**全部打包进去，运行时再决定用哪个，**
+
+而 Vite 由于采用ESM，浏览器可以直接按需加载，所以**不需要开发阶段打包**
+
+2. **启动速度**
+
+- **Webpack:** `解析全部依赖 → 打包 → 启动` 慢（O(项目规模)）
+- **Vite**：启动 server → 等浏览器请求 快（接近 O(1)）
+
+3. **HMR 更新方式**
+
+- **Webpack**：基于 bundle，需要重新编译模块
+- **Vite**：基于 ESM，直接重新请求模块
+
+4. **Tree Shaking 能力：**
+
+- Webpack：tree-shaking 较复杂
+- Vite（ESM）：可以静态分析，天然支持更好
+
+|方案|模块解析发生在|
+|---|---|
+|Webpack|构建时（build time）|
+|Vite|运行时（runtime）|
+
+5. **vite怎么处理 cjs 的第三方依赖？**
+
+会进行依赖预构建，像 react、vue、lodash 这种第三方依赖，Vite 会提前做一次 pre-bundling，把 CommonJS 转成 ESM，并把一些零碎依赖合并，减少浏览器请求数。这个预构建一般用的是高性能工具链，所以速度很快。
+
+除了 ESM 的优势，Vite 的开发阶段押注速度，生产阶段押注优化产物。
+
+6. **vite把“慢操作”从主链路里拿掉了**
+
+比如 TypeScript 类型检查、ESLint 这类静态分析，本质上往往要看整个模块图，不适合塞进“按需编译”的开发主流程。Vite 的思路是：先保证文件尽快可运行，类型检查单独做，所以开发体验更流畅。
+
+7. **不同的打包逻辑**
+
+**Webpack：** 开发和生产都是同一套打包逻辑
+
+**Vite：**
+- 开发：ESM + 不打包（快）
+- 生产：走构建流程（生成优化后的 bundle）

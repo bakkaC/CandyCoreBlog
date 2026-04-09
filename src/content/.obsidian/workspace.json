@@ -4,93 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "d7d9cd601e87bbbf",
+        "id": "710673abe34d1fe9",
         "type": "tabs",
         "children": [
           {
-            "id": "e2a6279d87ae055b",
+            "id": "be1643b11e10aae7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试准备.md",
+                "file": "notes/八股/发布订阅模式.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "面试准备"
-            }
-          },
-          {
-            "id": "a546dd7ed4ac5439",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "面试准备.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "面试准备"
-            }
-          },
-          {
-            "id": "3008eea07d88f6d7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "面试准备.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "面试准备"
-            }
-          },
-          {
-            "id": "81c07c382f7b083e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "blogs/瞎想/解决问题与解释问题.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "解决问题与解释问题"
-            }
-          },
-          {
-            "id": "6206e03e7acf4de6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "notes/八股/closure 闭包.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "closure 闭包"
-            }
-          },
-          {
-            "id": "2944987a60942c8e",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "Excalidraw/ReactRrender.excalidraw.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "ReactRrender.excalidraw"
+              "title": "发布订阅模式"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -122,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "乐观更新",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -249,8 +180,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -266,54 +196,54 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "3008eea07d88f6d7",
+  "active": "adce2d0c460692ca",
   "lastOpenFiles": [
-    "notes/八股/计算机网络（层级，协议，DNS，CDN，CORS）.md",
-    "notes/八股/HTTP.md",
-    "面试准备.md",
+    "未命名.base",
+    "未命名 1.base",
+    "notes/实时通信策略—websocket-sse.md",
+    "notes/assets/实时通信策略—websocket-sse/file-20260409163352684.png",
+    "notes/assets/实时通信策略—websocket-sse/file-20260409163337605.png",
+    "notes/assets/实时通信策略—websocket-sse",
+    "writing/防抖与节流.md",
+    "writing/Execution context 执行上下文.md",
+    "thoughts/style system.md",
+    "thoughts/UI的乐观更新策略.md",
+    "thoughts/图像批量裁剪的性能优化.md",
+    "thoughts/如何设计良好的react代码.md",
     "thoughts/立绘预览的时序问题.md",
+    "notes/基于vite的代码拆分.md",
+    "notes/React并发模式原理与应用.md",
+    "notes/HTML渲染策略.md",
+    "notes/ESM 和 CJS.md",
+    "notes/CRDT-Yjs 基本概念.md",
+    "notes/chatbox阅读记录.md",
+    "thoughts/AI coding Best Practice.md",
     "thoughts/react设计策略与哲学.md",
     "thoughts/rsc--nextjs.md",
-    "thoughts/乐观更新(tanstack query or local state).md",
-    "thoughts/状态管理库与组件解耦.md",
-    "thoughts/如何设计良好的react代码.md",
-    "thoughts/文档bug相关记录.md",
-    "thoughts/基于vite的代码拆分.md",
-    "thoughts/图像批量裁剪的性能优化.md",
-    "thoughts/React并发模式原理与应用.md",
-    "thoughts/AI coding Best Practice.md",
-    "thoughts/chatbox阅读记录.md",
-    "blogs/瞎想/解决问题与解释问题.md",
-    "Excalidraw/ReactRrender.excalidraw.md",
-    "notes/八股/对象的深度遍历.md",
-    "notes/react Rendering strategy.md",
+    "thoughts/Standard Schema与全栈类型安全.md",
+    "blogs/3 月的阅读与思考.md",
+    "Excalidraw/Drawing 2026-04-09 14.08.20.excalidraw.md",
     "notes/八股/发布订阅模式.md",
-    "notes/八股/浏览器渲染过程.md",
-    "notes/八股/apply,bind,new,prototype chain,object,Scope....md",
-    "notes/八股/js GC.md",
-    "notes/AI concept.md",
-    "notes/assets/AI concept",
-    "Execution context 执行上下文.md",
-    "notes/八股/closure 闭包.md",
-    "notes/assets/simplified-setstate",
-    "notes/八股/assets/浏览器渲染过程",
-    "notes/八股/assets/计算机网络（层级，协议，DNS，CDN，CORS）",
-    "notes/八股/assets/closure 闭包",
+    "archived/react Rendering strategy.md",
+    "Excalidraw/Drawing 2026-04-05 17.37.34.excalidraw.md",
+    "notes/八股/simplified-setstate.md",
+    "notes/八股/js函数队列性质.md",
+    "Excalidraw/assets/ReactRrender.excalidraw/Pasted Image 20260214154710_147.png",
+    "archived/assets/react Rendering strategy",
+    "Excalidraw/assets/ReactRrender.excalidraw/Pasted Image 20260401223838_386.png",
+    "archived/assets/react Rendering strategy/file-20260401230911696.png",
+    "archived/assets/react Rendering strategy/file-20260401230911695.png",
+    "archived/assets/react Rendering strategy/file-20260401230911696 1.png",
+    "archived/assets/文档bug相关记录",
+    "thoughts/assets/style system",
+    "archived/assets/状态管理库与组件解耦",
+    "notes/assets/chatbox阅读记录",
+    "notes/八股/assets/simplified-setstate",
+    "archived/assets/失恋-花-电锯",
+    "archived/assets/「 百米 」观后感",
+    "blogs/assets/3 月的阅读与思考/file-20260327153528682.png",
     "notes/八股/assets/closure 闭包/file-20260222225252343.png",
-    "assets/closure 闭包",
     "notes/assets/AI concept/file-20260223173413325.png",
-    "notes/assets/AI concept/file-20260223173413326.png",
-    "notes/assets/AI concept/file-20260223173413328.png",
-    "notes/assets/AI concept/file-20260223173413330.png",
-    "notes/assets/AI concept/file-20260223173413330 1.png",
-    "notes/assets/AI concept/file-20260223173413331.png",
-    "notes/assets/AI concept/file-20260223173413332.png",
-    "notes/assets/AI concept/file-20260223173413333.png",
-    "notes/assets/AI concept/file-20260223173413334.png",
-    "assets/AI concept",
-    "Excalidraw/批量裁剪.excalidraw.excalidraw",
-    "Excalidraw/assets/初识AI.excalidraw",
-    "blogs/瞎想/assets/解决问题与解释问题",
     "未命名.canvas"
   ]
 }
