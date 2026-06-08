@@ -60,7 +60,7 @@ export function CollectionSeal({ label, variant }: CollectionSealProps) {
   const { accent, icon } = SEAL_STYLES[variant];
 
   return (
-    <div className="relative h-[8.75rem] w-[8.75rem] sm:h-[9.5rem] sm:w-[9.5rem]">
+    <div className="relative h-35 w-35 sm:h-38 sm:w-38">
       <svg viewBox="0 0 320 320" aria-hidden="true" className="h-full w-full">
         <polygon
           points={outerBurstPoints}

@@ -27,6 +27,7 @@ interface FilesystemItemProps {
   defaultOpen?: boolean;
   itemClassName?: string;
   linkClassName?: string;
+  hoverTextClassName?: string;
 }
 
 export function FilesystemItem({
@@ -38,6 +39,7 @@ export function FilesystemItem({
   defaultOpen = false,
   itemClassName,
   linkClassName,
+  hoverTextClassName = 'group-hover:text-accent',
 }: FilesystemItemProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const hasChildren = Boolean(node.nodes && node.nodes.length > 0);
@@ -88,6 +90,7 @@ export function FilesystemItem({
         defaultOpen={defaultOpen}
         itemClassName={itemClassName}
         linkClassName={linkClassName}
+        hoverTextClassName={hoverTextClassName}
       />
     ));
 
@@ -113,8 +116,10 @@ export function FilesystemItem({
   };
 
   const titleText = node.title ?? node.name;
-  const titleClassName =
-    'block min-w-0 truncate text-base font-medium tracking-tight group-hover:text-accent sm:overflow-visible sm:text-clip sm:whitespace-normal';
+  const titleClassName = cn(
+    'block min-w-0 truncate text-base font-medium tracking-tight sm:overflow-visible sm:text-clip sm:whitespace-normal',
+    hoverTextClassName
+  );
   const titleNode = isParentEntryRow ? (
     <a href={node.href} onClick={(event) => event.stopPropagation()} className={titleClassName}>
       {titleText}
@@ -127,12 +132,12 @@ export function FilesystemItem({
     <div className="flex min-w-0 items-center gap-4">{label}</div>
   ) : isFolderRow ? (
     <span className="flex min-w-0 items-center gap-3.5">
-      <Folder className="size-3.5 shrink-0" aria-hidden="true" />
+      <Folder className={cn('size-3.5 shrink-0', hoverTextClassName)} aria-hidden="true" />
       {titleNode}
     </span>
   ) : node.index ? (
     <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2">
-      <span className="text-xs font-semibold">{node.index}</span>
+      <span className={cn('text-xs font-semibold', hoverTextClassName)}>{node.index}</span>
       {titleNode}
     </div>
   ) : (
@@ -143,7 +148,7 @@ export function FilesystemItem({
     <div className="flex w-full items-start justify-between gap-6">
       <div className="flex min-w-0 items-start gap-4">{contentStack}</div>
       {node.meta ? (
-        <span className="shrink-0 text-xs">{node.meta}</span>
+        <span className={cn('shrink-0 text-xs', hoverTextClassName)}>{node.meta}</span>
       ) : null}
     </div>
   );

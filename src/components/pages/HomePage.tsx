@@ -33,7 +33,7 @@ export default function HomePage({
       <section className="relative z-10 px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
         <div className="mx-auto max-w-7xl">
           <div className="relative [--cut-size:72px] md:[--cut-size:88px] lg:[--cut-size:120px]">
-            <svg
+            {/* <svg
               aria-hidden="true"
               viewBox="0 0 32 32"
               width="48"
@@ -52,7 +52,7 @@ export default function HomePage({
               strokeLinejoin="miter"
             >
               <polygon points="1,1 1,23 23,1" fill="currentColor" stroke="black" strokeWidth="0.8" />
-            </svg>
+            </svg> */}
             <BlogMark className="pointer-events-none absolute left-22 top-4 z-20 w-28 translate-x-0 text-slate-900 sm:left-26 sm:top-6 sm:w-32 md:left-28 md:top-5 md:w-32 lg:left-36 lg:top-8 lg:w-44" />
             <ProfileCard baseUrl={baseUrl} />
           </div>

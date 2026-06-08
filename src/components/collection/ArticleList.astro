@@ -17,6 +17,8 @@ interface Props {
   headerTheme?: 'light' | 'dark';
   backButtonTheme?: 'light' | 'dark';
   panelClassName?: string;
+  overlayClassName?: string;
+  hoverTextClassName?: string;
 }
 
 const {
@@ -31,6 +33,8 @@ const {
   headerTheme = 'light',
   backButtonTheme = 'light',
   panelClassName,
+  overlayClassName = 'bg-black/10',
+  hoverTextClassName = 'group-hover:text-accent',
 } = Astro.props;
 const withSiteBase = (path: string) => withBase(baseUrl, path);
 const isDarkHeader = headerTheme === 'dark';
@@ -221,7 +225,7 @@ const listNodes = assignEntryIndexes(inheritFolderMeta(sortTree(rootNodes)));
 >
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 bg-black/10"
+    class:list={['pointer-events-none absolute inset-0 z-0', overlayClassName]}
   />
   <div
     aria-hidden="true"
@@ -259,6 +263,7 @@ const listNodes = assignEntryIndexes(inheritFolderMeta(sortTree(rootNodes)));
                   node={node}
                   itemClassName="py-3"
                   linkClassName="group flex-col gap-2 transition hover:translate-x-1"
+                  hoverTextClassName={hoverTextClassName}
                 />
               ))}
             </ul>
