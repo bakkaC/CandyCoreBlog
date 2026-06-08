@@ -1,0 +1,515 @@
+---
+title: CRDT/Yjs 概念思路
+date: 2026-03-20
+description: "CRDT/Yjs 概念思路，介绍 CRDT 与 Yjs 的核心机制、冲突合并逻辑与协同编辑中的数据同步模型。"
+tags: [CRDT, Yjs, 协同编辑, 数据同步]
+---
+
+## CRDT
+
+Conflict-free Replicated Data Types  
+构建类似 Google Docs 或 Figma 的实时协作应用程序众所周知非常困难。CRDTs（无冲突复制数据类型）和 Yjs 使这一目标得以实现，而无需复杂的操作转换算法。本指南涵盖了您需要了解的所有内容。
+
+当多个用户同时编辑时，会出现冲突：
+
+```plain text
+graph LR
+    UserA[User A: "Hello"] -->|edit| Doc1[(Document)]
+    UserB[User B: "World"] -->|edit| Doc1
+    Doc1 -->|conflict| Issue[❌ Conflict!]
+```
+
+CRDTs 是一种可以自动合并的数据结构，即使并发编辑时也是如此：  
+CRDTs are data structures that can be merged automatically, even when edited concurrently:
+
+<table header-row="true">
+<tr>
+<td>**Approach**</td>
+<td>**Description**</td>
+<td>**Complexity**</td>
+</tr>
+<tr>
+<td>**Locking**</td>
+<td>One user at a time</td>
+<td>Simple, blocking</td>
+</tr>
+<tr>
+<td>**OT (Operational Transform)**</td>
+<td>Transform operations</td>
+<td>Complex</td>
+</tr>
+<tr>
+<td>**CRDT**</td>
+<td>Mathematically mergeable</td>
+<td>Moderate</td>
+</tr>
+</table>
+
+```plain text
+graph LR
+    UserA[User A: "Hello"] --> Doc[(Yjs Doc)]
+    UserB[User B: "World"] --> Doc
+    Doc -->|auto-merge| Result[✅ "Hello World"]Copy
+```
+
+### **Types of CRDTs**
+
+<table header-row="true">
+<tr>
+<td>类型</td>
+<td>数据结构</td>
+<td>能做什么</td>
+<td>典型场景</td>
+</tr>
+<tr>
+<td>G-Counter</td>
+<td>数字</td>
+<td>只增不减</td>
+<td>点赞、计数</td>
+</tr>
+<tr>
+<td>LWW-Register</td>
+<td>单值</td>
+<td>覆盖更新</td>
+<td>用户信息</td>
+</tr>
+<tr>
+<td>OR-Set</td>
+<td>集合</td>
+<td>加 + 删除</td>
+<td>标签、共享数据</td>
+</tr>
+<tr>
+<td>RGA</td>
+<td>序列</td>
+<td>有序插入</td>
+<td>文档编辑</td>
+</tr>
+</table>
+
+多个用户同时点赞，如果用普通计数器会冲突；G-Counter 可以无冲突地合并所有“+1”。
+
+LWW-Register（Last-Write-Wins Register），用途：单值存储（最后写入优先）
+
+OR-Set（Observed-Remove Set）  
+普通 set 在并发 add/remove 时会冲突，比如：
+
+- A 添加 x
+- B 删除 x（但没看到 A 的添加）
+
+OR-Set 的处理方式：
+
+- 删除只作用于已知的版本
+- 不会误删并发新增的数据
+
+RGA（Replicated Growable Array）
+
+- 每个元素有唯一 ID
+- 插入是“在某个元素之后插入”
+- 删除通常是标记删除（tombstone）
+
+两个人同时编辑文本：
+
+- A 在 “H” 后插入 “i”
+- B 在 “H” 后插入 “e”
+
+RGA 能保证：最终顺序一致（例如 He i 或 Hi e，取决于规则，但所有人一样）
+
+## Y.js
+
+Yjs 是一个高性能的 CRDT 实现：
+
+```javascript
+// Simple Yjs usage
+import * as Y from 'yjs';
+
+const ydoc = new Y.Doc();
+
+// Get or create a shared type
+const ytext = ydoc.getText('message');
+
+// Observe changes
+ytext.observe(event => {
+  console.log('Text changed:', ytext.toString());
+});
+
+// Make changes
+ytext.insert(0, 'Hello');
+ytext.insert(5, ' World');
+```
+
+Shared Types
+
+```javascript
+// Text - for editors
+const ytext = ydoc.getText('document');
+
+// Array - for lists
+const yarray = ydoc.getArray('items');
+
+// Map - for key-value
+const ymap = ydoc.getMap('settings');
+
+// Object - nested data
+const yobj = ydoc.getObject('user');
+
+// XML Fragment - rich text
+const yxml = ydoc.getXmlFragment('content');
+```
+
+Basic Operations
+
+```javascript
+// Text operations
+const ytext = ydoc.getText('doc');
+
+// Insert
+ytext.insert(0, 'Hello World');
+ytext.delete(0, 5); // Delete 5 chars from position 0
+
+// Get content
+console.log(ytext.toString());
+
+// Get length
+console.log(ytext.length);
+```
+
+Array Operations
+
+```javascript
+const yarray = ydoc.getArray('items');
+
+// Push to end
+yarray.push(['item1', 'item2']);
+
+// Insert at position
+yarray.insert(0, ['newItem']);
+
+// Delete
+yarray.delete(0, 1); // Delete 1 item at index 0
+
+// Observe
+yarray.observe(event => {
+  event.changes.delta.forEach(change => {
+    if (change.insert) console.log('Inserted:', change.insert);
+    if (change.delete) console.log('Deleted:', change.delete);
+  });
+});
+```
+
+Map Operations
+
+```javascript
+const ymap = ydoc.getMap('settings');
+
+// Set values
+ymap.set('theme', 'dark');
+ymap.set('notifications', true);
+
+// Get value
+console.log(ymap.get('theme'));
+
+// Delete
+ymap.delete('notifications');
+
+// Observe
+ymap.observe(event => {
+  event.keys.forEach(key => {
+    console.log(`${key}: ${ymap.get(key)}`);
+  });
+});
+```
+
+### 实时协作
+
+Yjs（CRDT） + WebSocket + Awareness
+
+```javascript
+// server
+
+import { WebSocketServer } from 'ws';
+import { setupWSConnection } from 'y-websocket/bin/utils';
+
+const wss = new WebSocketServer({ port: 1234 });
+
+wss.on('connection', (ws, req) => {
+  setupWSConnection(ws, req);
+});
+```
+
+本质：**启动一个 Yjs 协作服务器**
+
+- 开一个 WebSocket 服务（端口 1234）
+- 每个客户端连接进来时：
+  - `setupWSConnection` 会自动处理：
+    - 文档同步
+    - CRDT update 广播
+    - awareness（在线状态）同步
+
+你**不用自己写同步逻辑**，Yjs 已经帮你封装好了。
+
+```javascript
+// Client
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+
+const ydoc = new Y.Doc(); // Y.Doc = 整个共享数据
+const ytext = ydoc.getText('document'); // ytext = 文档中的一个“文本类型”
+
+// Connect to WebSocket server
+const provider = new WebsocketProvider(
+  'ws://localhost:1234',
+  'my-room',
+  ydoc // 把 ydoc 绑定到这个房间
+);
+
+// 监听连接状态
+provider.on('status', event => {
+  console.log('Connection:', event.status);
+});
+
+// The document syncs automatically!
+ytext.insert(0, 'Hello from client!');
+```
+
+`ytext.insert(0, 'Hello from client!');` 发生了什么：
+
+- 修改本地 CRDT
+- 生成 update
+- 自动发给服务器
+- 服务器广播给其他人
+- 所有人自动同步
+
+Awareness（在线状态 / Presence）
+
+```javascript
+// Share cursor position and user info
+const awareness = provider.awareness;
+
+// 设置自己的状态, 用户名，光标位置
+awareness.setLocalState({
+  user: {
+    name: 'John',
+    color: '#ff9900',
+  },
+  cursor: {
+    index: 10,
+    length: 0,
+  },
+});
+
+// Observe others
+awareness.on('change', () => {
+  const states = awareness.getStates();
+
+  states.forEach((state, clientId) => {
+    if (clientId !== awareness.clientID) {
+      console.log('User:', state.user);
+    }
+  });
+});
+```
+
+- **数据层：**
+  - **Yjs：让数据可以无冲突同步**
+  - 数据结构，CRDT 合并
+- **同步层：**
+  - **WebSocketProvider：让数据在客户端之间传播**
+  - `Client A ←→ Server ←→ Client B`
+- **Awareness：**
+  - 不参与 CRDT 合并
+  - 是 provider 自带的模块，通过同一条连接广播和 Yjs 数据“并行存在”
+
+```javascript
+Yjs (CRDT)
+   ↑
+provider (WebSocket/WebRTC)
+   ↑
+Awareness（挂在 provider 上）
+```
+
+### React 集成
+
+1. YjsProvider（创建共享文档 + 连接）
+
+```javascript
+import { useState, useEffect, createContext, useContext } from 'react';
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+
+// 创建一个 React Context，用来在组件树中共享 doc 和 provider
+const YjsContext = createContext(null);
+
+export function YjsProvider({ children, room }) {
+  // 创建一个 Y.Doc（CRDT 文档）
+  // useState + lazy init 确保只创建一次（不会每次 render 重建）
+  const [doc] = useState(() => new Y.Doc());
+
+  // provider 负责网络同步（WebSocket）
+  const [provider, setProvider] = useState(null);
+
+  useEffect(() => {
+    // 创建 WebSocket provider，连接到服务器
+    const wsProvider = new WebsocketProvider(
+      'ws://localhost:1234', // 协作服务器地址
+      room,                  // 房间名（同一个 room 的人会同步）
+      doc                    // 绑定的 CRDT 文档
+    );
+
+    // 保存 provider 到 state（方便其他地方用，比如 awareness）
+    setProvider(wsProvider);
+
+    // 清理函数：组件卸载或 room 变化时断开连接
+    return () => wsProvider.destroy();
+  }, [room, doc]); // room 变化会重新连接
+
+  // 把 doc 和 provider 通过 Context 提供给子组件
+  return (
+    <YjsContext.Provider value={{ doc, provider }}>
+      {children}
+    </YjsContext.Provider>
+  );
+}
+```
+
+2. Editor 组件（绑定 UI 和 CRDT）
+
+```javascript
+export function Editor() {
+  // 从 Context 拿到共享的 Y.Doc
+  const { doc } = useContext(YjsContext);
+
+  // 本地 React state（用于驱动 textarea UI）
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    // 从 Y.Doc 中获取一个共享文本对象（类似 CRDT string）
+    const ytext = doc.getText('content');
+
+    // 定义一个观察函数：当 ytext 变化时触发
+    const observer = () => {
+      // 把 CRDT 数据同步到 React state
+      setText(ytext.toString());
+    };
+
+    // 注册监听（CRDT → UI）
+    ytext.observe(observer);
+
+    // 初始化一次（避免初始为空）
+    setText(ytext.toString());
+
+    // 清理监听（组件卸载时）
+    return () => ytext.unobserve(observer);
+  }, [doc]);
+
+  return (
+    <textarea
+      value={text} // UI 显示的是 React state
+
+      onChange={e => {
+        const ytext = doc.getText('content');
+
+        // 这里是一个“全量替换”的写法（简单但低效）
+
+        // 删除原内容
+        ytext.delete(0, ytext.length);
+        // 插入新内容
+        ytext.insert(0, e.target.value);
+      }}
+    />
+  );
+}
+```
+
+CRDT←→UI：
+
+```javascript
+其他用户输入
+   ↓
+Yjs 收到 update
+   ↓
+ytext 变化
+   ↓
+observe 触发
+   ↓
+setText()
+   ↓
+textarea 更新
+```
+
+```javascript
+用户输入 textarea
+   ↓
+onChange
+   ↓
+ytext.delete + insert
+   ↓
+Yjs 生成 update
+   ↓
+WebSocket 发出去
+   ↓
+其他人同步
+```
+
+- React 负责显示，Yjs 负责同步，WebSocket 负责传播
+- 这里 observe 监听 CRDT 数据，然后执行回调函数执行 UI 更新
+
+### 冲突合并
+
+在真实协作场景里，两个用户通常各自操作自己的本地副本，然后再同步。
+
+```javascript
+// Automatic merge example
+const ydoc1 = new Y.Doc();
+const ydoc2 = new Y.Doc();
+
+// User 1 edits
+const text1 = ydoc1.getText('doc');
+text1.insert(0, 'Hello');
+
+// User 2 edits simultaneously
+const text2 = ydoc2.getText('doc');
+text2.insert(0, 'Hi ');
+
+// Merge - both get both changes!
+Y.applyUpdate(ydoc1, Y.encodeStateAsUpdate(ydoc2));
+Y.applyUpdate(ydoc2, Y.encodeStateAsUpdate(ydoc1));
+
+console.log(ydoc1.getText('doc').toString()); // "Hi Hello"
+console.log(ydoc2.getText('doc').toString()); // "Hi Hello"
+```
+
+`Y.encodeStateAsUpdate(ydoc2)` 意思是：
+
+- 把 `ydoc2` 当前的状态编码成一个 update
+- 这个 update 可以发送给别人
+
+相当于把“我这边做过哪些修改”打包出来。
+
+`Y.applyUpdate(ydoc1, ...)` 意思是：把来自另一端的 update 应用到 `ydoc1`
+
+- 所以第一行表示：把 `ydoc2` 的修改同步到 `ydoc1`
+- 第二行表示：把 `ydoc1` 的修改同步到 `ydoc2`
+
+自定义合并  
+有时候你用的是 `Y.Map`，里面存的是业务对象，这时你可能想自己定义“冲突解决规则”。
+
+```javascript
+// Sometimes you need custom logic
+ymap.observe(event => {
+  event.changes.keys.forEach((change, key) => {
+    if (change.action === 'update') {
+      // Custom conflict resolution
+      const local = change.value;
+      const remote = fetchRemoteValue(key);
+
+      // Use "last write wins" or merge
+      if (remote.timestamp > local.timestamp) {
+        ymap.set(key, remote.value);
+      }
+    }
+  });
+});
+```
+
+这里表示，监听到变化时执行回调：对于更新事件，远程和本地冲突时，使用最新值。

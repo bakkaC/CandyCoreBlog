@@ -34,7 +34,9 @@ export default {
       },
       fontFamily: {
         sans: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['LXGW WenKai', 'Noto Serif SC', 'Georgia', 'serif'],
+        display: ['DIN 2014', 'Outfit', 'system-ui', '-apple-system', 'sans-serif'],
+        garnet: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['Georgia', 'serif'],
       },
     },
   },

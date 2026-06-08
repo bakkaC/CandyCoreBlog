@@ -1,6 +1,6 @@
-# CdCore's Blog
+# Bakka's Blog
 
-CandyCoreBlog 是我的个人博客，记录前端开发、工程实践与随想杂记。
+Bakka's Blog 是我的个人博客，记录前端开发、工程实践与随想杂记。
 
 ## Tech Stack
 

@@ -7,7 +7,16 @@
 
 @layer base {
   body {
-    font-family: "Outfit", "LXGW WenKai", "Noto Serif SC", system-ui, -apple-system, sans-serif;
+    font-family: "Outfit", system-ui, -apple-system, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "DIN 2014", "Outfit", system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -24,6 +33,59 @@
     word-break: break-word;
     overflow-wrap: anywhere;
     hyphens: auto;
+  }
+
+  .markdown .wiki-link {
+    position: relative;
+    border-bottom: 1px dashed color-mix(in oklab, var(--color-chart-1) 65%, var(--color-foreground) 35%);
+    color: color-mix(in oklab, var(--color-chart-1) 75%, var(--color-foreground) 25%);
+    text-decoration: none;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .markdown .wiki-link:hover,
+  .markdown .wiki-link:focus-visible {
+    border-bottom-color: color-mix(in oklab, var(--color-chart-2) 70%, var(--color-foreground) 30%);
+    color: color-mix(in oklab, var(--color-chart-2) 80%, var(--color-foreground) 20%);
+    outline: none;
+  }
+
+  .markdown .wiki-link--missing {
+    border-bottom-color: color-mix(in oklab, var(--color-destructive) 75%, var(--color-foreground) 25%);
+    color: color-mix(in oklab, var(--color-destructive) 85%, var(--color-foreground) 15%);
+  }
+
+  .markdown .wiki-link[data-wiki-preview]::after {
+    content: attr(data-wiki-title) "\A\A" attr(data-wiki-preview);
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.9rem);
+    z-index: 30;
+    display: none;
+    width: min(26rem, 75vw);
+    padding: 0.85rem 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-border) 70%, var(--color-foreground) 30%);
+    border-radius: 1rem;
+    background: color-mix(in oklab, var(--color-card) 90%, white 10%);
+    box-shadow: 0 16px 40px rgb(15 23 42 / 0.18);
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    pointer-events: none;
+    white-space: pre-wrap;
+  }
+
+  @media (hover: hover) {
+    .markdown .wiki-link[data-wiki-preview]:hover::after,
+    .markdown .wiki-link[data-wiki-preview]:focus-visible::after {
+      display: block;
+    }
+  }
+
+  .markdown .wiki-embed {
+    border-radius: 1rem;
   }
 
   .viewport-frame {
@@ -48,6 +110,9 @@
 }
 
 @theme inline {
+  --font-sans: "Outfit", system-ui, -apple-system, sans-serif;
+  --font-display: "DIN 2014", "Outfit", system-ui, -apple-system, sans-serif;
+  --font-garnet: "Outfit", system-ui, -apple-system, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

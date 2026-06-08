@@ -1,0 +1,44 @@
+---
+import ExcalidrawPreview from './ExcalidrawPreview';
+import { loadExcalidrawScene } from '../../lib/excalidraw';
+
+interface Props {
+  align?: 'center' | 'left';
+  caption?: string;
+  className?: string;
+  height?: number;
+  shadow?: boolean;
+  size?: 'full' | 'lg' | 'md' | 'sm' | 'xl';
+  src: string;
+  title?: string;
+  width?: string;
+}
+
+const {
+  align = 'center',
+  caption,
+  className = '',
+  height = 420,
+  shadow = false,
+  size = 'full',
+  src,
+  title,
+  width,
+} = Astro.props as Props;
+
+const scene = await loadExcalidrawScene(src);
+---
+
+<div class={`not-prose my-8 ${className}`.trim()}>
+  <ExcalidrawPreview
+    client:load
+    align={align}
+    scene={scene}
+    caption={caption}
+    height={height}
+    shadow={shadow}
+    size={size}
+    title={title}
+    width={width}
+  />
+</div>

@@ -31,23 +31,23 @@ export async function GET(context: APIContext) {
 
   const items: FeedItem[] = [
     ...notes.map((entry) => ({
-      title: entry.data.title ?? entry.slug,
+      title: entry.data.title ?? entry.id,
       description: entry.data.description,
-      link: withBase(baseUrl, `/notes/${entry.slug}`),
+      link: withBase(baseUrl, `/notes/${entry.id}`),
       pubDate: parseContentDate(entry.data.date),
       categories: entry.data.tags,
     })),
     ...thoughts.map((entry) => ({
-      title: entry.data.title ?? entry.slug,
+      title: entry.data.title ?? entry.id,
       description: entry.data.description,
-      link: withBase(baseUrl, `/thoughts/${entry.slug}`),
+      link: withBase(baseUrl, `/thoughts/${entry.id}`),
       pubDate: parseContentDate(entry.data.date),
       categories: entry.data.tags,
     })),
     ...blogs.map((entry) => ({
-      title: entry.data.title ?? entry.slug,
+      title: entry.data.title ?? entry.id,
       description: entry.data.description,
-      link: withBase(baseUrl, `/blog/${entry.slug}`),
+      link: withBase(baseUrl, `/blog/${entry.id}`),
       pubDate: parseContentDate(entry.data.date),
       categories: entry.data.tags,
     })),
@@ -58,7 +58,7 @@ export async function GET(context: APIContext) {
   });
 
   return rss({
-    title: "CdCore's Blog",
+    title: "Bakka's Blog",
     description: '记录前端开发、工程实践与随想杂记',
     site: context.site ?? new URL('https://cdhxr.github.io'),
     items: items.map((item) => ({

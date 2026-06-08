@@ -118,7 +118,7 @@ def main() -> None:
         docname = md_path.stem
         docname_url = docname.replace(" ", "%20")
 
-        dest_md = dest_root / f"{docname}.md"
+        dest_md = dest_root / f"{docname}.mdx"
         if dest_md.exists():
             fail(f"markdown already exists: {dest_md}")
 

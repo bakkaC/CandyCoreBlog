@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+
+import ArticleList from '../../components/collection/ArticleList.astro';
+import BaseLayout from '../../layouts/Layout.astro';
+import { COLLECTION_LABELS, collectTagBuckets } from '../../lib/site-taxonomy';
+
+export async function getStaticPaths() {
+  const [notes, thoughts, blogs] = await Promise.all([
+    getCollection('notes'),
+    getCollection('thoughts'),
+    getCollection('blogs'),
+  ]);
+
+  const tagBuckets = collectTagBuckets([...notes, ...thoughts, ...blogs]);
+
+  return tagBuckets.map((bucket) => ({
+    params: { slug: bucket.slug },
+    props: { bucket },
+  }));
+}
+
+const { bucket } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const collectionSummary = bucket.collections
+  .map((collection) => COLLECTION_LABELS[collection])
+  .join(' / ');
+
+const title = `#${bucket.tag}`;
+const subtitle = `${bucket.count} 篇相关文章 · ${collectionSummary}`;
+const description = `与 ${bucket.tag} 相关的文章列表`;
+---
+
+<BaseLayout title={`${title} | Tags`} description={description}>
+  <ArticleList
+    title={title}
+    subtitle={subtitle}
+    entries={bucket.entries}
+    baseUrl={baseUrl}
+    rootPath="/tag"
+    accent="#e4e4e7"
+    archiveLabel="tag"
+    headerTheme="dark"
+    backButtonTheme="dark"
+    panelClassName="border-stone-900"
+  />
+</BaseLayout>

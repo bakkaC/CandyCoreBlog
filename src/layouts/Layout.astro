@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { formatSchemaDate } from '../lib/content-date';
+import { withBase } from '../lib/site-taxonomy';
 
 interface Props {
   title?: string;
@@ -21,18 +22,16 @@ const normalizedDescription =
   typeof description === 'string' && description.trim().length
     ? description.trim()
     : undefined;
+const siteName = "Bakka's Blog";
+const authorName = 'Bakka';
 
-const pageTitle = normalizedTitle ? `${normalizedTitle} | CdCore's Blog` : "CdCore's Blog";
+const pageTitle = normalizedTitle ? `${normalizedTitle} | ${siteName}` : siteName;
 const pageDescription =
   normalizedDescription ?? '记录技术成长、分享生活感悟、探索思维边界';
 const baseUrl = import.meta.env.BASE_URL;
-const normalizeBase = (value: string) => (value.endsWith('/') ? value : `${value}/`);
-const withBase = (path: string) => {
-  const normalizedBase = normalizeBase(baseUrl);
-  const normalizedPath = path === '/' ? '' : path.startsWith('/') ? path.slice(1) : path;
-  return `${normalizedBase}${normalizedPath}`;
-};
-const homeHref = import.meta.env.DEV ? '/CandyCoreBlog' : withBase('/');
+const withSiteBase = (path: string) => withBase(baseUrl, path);
+const homeHref = import.meta.env.DEV ? '/CandyCoreBlog' : withSiteBase('/');
+const navAvatarSrc = withSiteBase('/kumiko.jpg');
 
 const canonicalUrl =
   canonical ??
@@ -40,19 +39,21 @@ const canonicalUrl =
 
 const ogImagePath = image ?? '/kumiko.jpg';
 const ogImageUrl = Astro.site
-  ? new URL(withBase(ogImagePath), Astro.site).toString()
-  : withBase(ogImagePath);
+  ? new URL(withSiteBase(ogImagePath), Astro.site).toString()
+  : withSiteBase(ogImagePath);
 
 const resolvedOgType = ogType ?? 'website';
 const publishedISO = formatSchemaDate(publishedTime);
-const rssUrl = Astro.site ? new URL(withBase('/rss.xml'), Astro.site).toString() : withBase('/rss.xml');
+const rssUrl = Astro.site
+  ? new URL(withSiteBase('/rss.xml'), Astro.site).toString()
+  : withSiteBase('/rss.xml');
 
-const identityUrl = Astro.site ? new URL(withBase('/'), Astro.site).toString() : withBase('/');
+const identityUrl = Astro.site ? new URL(withSiteBase('/'), Astro.site).toString() : withSiteBase('/');
 const websiteSchema = Astro.site
   ? {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: "CdCore's Blog",
+      name: siteName,
       url: identityUrl,
       inLanguage: 'zh-Hans',
     }
@@ -63,7 +64,7 @@ const pageSchema =
     ? {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
-        headline: normalizedTitle ?? "CdCore's Blog",
+        headline: normalizedTitle ?? siteName,
         description: pageDescription,
         url: canonicalUrl,
         mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
@@ -71,7 +72,7 @@ const pageSchema =
         ...(publishedISO ? { datePublished: publishedISO } : {}),
         ...(tags?.length ? { keywords: tags.join(', ') } : {}),
         image: [ogImageUrl],
-        author: { '@type': 'Person', name: 'CdCore', url: identityUrl },
+        author: { '@type': 'Person', name: authorName, url: identityUrl },
       }
     : {
         '@context': 'https://schema.org',
@@ -91,7 +92,7 @@ const navCandidates = [
 ];
 const currentPath = Astro.url.pathname ?? '/';
 const navLinks = navCandidates.map((link) => {
-  const href = withBase(link.path);
+  const href = withSiteBase(link.path);
   const normalizedCurrent = currentPath.endsWith('/') && currentPath.length > 1
     ? currentPath.slice(0, -1)
     : currentPath;
@@ -112,7 +113,7 @@ const navLinks = navCandidates.map((link) => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
-      <meta name="author" content="CdCore" />
+      <meta name="author" content={authorName} />
       <meta
         name="robots"
         content={noindex ? 'noindex, nofollow' : 'index, follow'}
@@ -123,7 +124,7 @@ const navLinks = navCandidates.map((link) => {
       <meta property="og:description" content={pageDescription} />
       <meta property="og:type" content={resolvedOgType} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:site_name" content="CdCore's Blog" />
+      <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="zh_CN" />
       <meta property="og:image" content={ogImageUrl} />
 
@@ -142,7 +143,7 @@ const navLinks = navCandidates.map((link) => {
       <link
         rel="alternate"
         type="application/rss+xml"
-        title="CdCore's Blog RSS"
+        title={`${siteName} RSS`}
         href={rssUrl}
       />
 
@@ -155,9 +156,9 @@ const navLinks = navCandidates.map((link) => {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap"
+        href="https://db.onlinewebfonts.com/c/2a2b767302dad0d292294c13d63a0c5f?family=DIN+2014"
       />
-      <link rel="icon" type="image/jpeg" href={withBase('/kumiko.jpg')} />
+      <link rel="icon" type="image/jpeg" href={withSiteBase('/kumiko.jpg')} />
       {navLinks.map((link) => (
         <link rel="prefetch" href={link.href} />
       ))}
@@ -165,11 +166,19 @@ const navLinks = navCandidates.map((link) => {
     <body class="min-h-screen bg-background text-foreground">
       <header class="sticky top-0 z-50 bg-background/80 backdrop-blur">
         <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-          <a href={homeHref} class="text-base font-semibold sm:text-lg">CdCore's Blog</a>
-          <nav class="flex items-center gap-6 text-xs md:text-sm">
+          <a href={homeHref} class="inline-flex items-center gap-3 font-sans text-base font-bold sm:text-lg">
+            <img
+              src={navAvatarSrc}
+              alt=""
+              aria-hidden="true"
+              class="h-8 w-8 rounded-full object-cover ring-1 ring-slate-200"
+            />
+            <span>{siteName}</span>
+          </a>
+          <nav class="font-sans flex items-center gap-6 text-xs font-medium md:text-sm">
             {navLinks.map((link) => (
               <a
-                class="hover:text-primary"
+                class="font-medium hover:text-primary"
                 href={link.href}
                 rel="prefetch"
                 aria-current={link.isActive ? 'page' : undefined}

@@ -9,7 +9,7 @@ const sorted = [...entries].sort((a, b) => {
   const aDate = getContentDateTimestamp(a.data.date);
   const bDate = getContentDateTimestamp(b.data.date);
   if (aDate !== bDate) return bDate - aDate;
-  return a.slug.localeCompare(b.slug, 'zh-Hans');
+  return a.id.localeCompare(b.id, 'zh-Hans');
 });
 
 const baseUrl = import.meta.env.BASE_URL;

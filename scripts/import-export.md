@@ -24,8 +24,8 @@ python3 scripts/import-export.py /path/to/export.zip --to blogs
 
 ## 做了什么
 
-- 查找导出内容中的 **唯一** `.md` 文件
-- 将 `.md` 移动到目标集合目录：
+- 查找导出内容中的 **唯一** `.md` 源文件
+- 将内容写入目标集合目录的 `.mdx` 文件：
   - `src/content/notes/`
   - `src/content/blogs/`
   - `src/content/thoughts/`
@@ -43,15 +43,15 @@ python3 scripts/import-export.py /path/to/export.zip --to blogs
 
 ## 限制与注意
 
-- **仅支持单篇导出**（导出目录内只能有 1 个 `.md`）
-- 若目标 `.md` 或 `assets/<文档名>` 已存在，会直接报错避免覆盖
+- **仅支持单篇导出**（导出目录内只能有 1 个 `.md` 源文件）
+- 若目标 `.mdx` 或 `assets/<文档名>` 已存在，会直接报错避免覆盖
 - 链接以 `http://`、`https://`、`mailto:`、`data:`、`#` 开头的不会被改写
 - 文档名中的空格会被替换为 `%20`（与现有内容一致）
 
 ## 常见报错
 
 - `expected exactly 1 markdown file`：导出目录内有多个 `.md`，请先拆分
-- `markdown already exists`：目标集合已有同名 md，需重命名或手动清理
+- `markdown already exists`：目标集合已有同名 mdx，需重命名或手动清理
 - `assets folder already exists`：同名 assets 目录已存在
 
 ## 可扩展方向（需要的话告诉我）

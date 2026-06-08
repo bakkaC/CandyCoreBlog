@@ -1,0 +1,141 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  align?: 'center' | 'left';
+  alt?: string;
+  caption?: string;
+  className?: string;
+  shadow?: boolean;
+  size?: 'full' | 'lg' | 'md' | 'sm' | 'xl';
+  src: ImageMetadata | string;
+  width?: string;
+}
+
+const {
+  align = 'center',
+  alt = '',
+  caption,
+  className = '',
+  shadow = false,
+  size = 'full',
+  src,
+  width,
+} = Astro.props as Props;
+
+const resolvedSrc = typeof src === 'string' ? src : src.src;
+const dialogId = `zoom-image-${crypto.randomUUID()}`;
+const rootId = `${dialogId}-root`;
+const alignClass = align === 'left' ? 'mr-auto' : 'mx-auto';
+const sizeWidthMap = {
+  full: '100%',
+  xl: '72rem',
+  lg: '56rem',
+  md: '44rem',
+  sm: '32rem',
+} as const;
+const figureMaxWidth = width ?? sizeWidthMap[size];
+const figureStyle = `max-width: ${figureMaxWidth};`;
+const buttonClass = [
+  'group block w-full overflow-hidden rounded-xl text-left transition duration-200',
+  shadow ? 'shadow-[0_18px_40px_rgba(15,23,42,0.08)] hover:shadow-[0_24px_56px_rgba(15,23,42,0.14)] hover:-translate-y-0.5' : '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<figure
+  id={rootId}
+  class={`not-prose my-8 w-full ${alignClass} ${className}`.trim()}
+  style={figureStyle}
+>
+  <button
+    type="button"
+    class={buttonClass}
+    data-zoom-trigger
+    aria-controls={dialogId}
+    aria-haspopup="dialog"
+  >
+    <img
+      src={resolvedSrc}
+      alt={alt}
+      loading="lazy"
+      class="block h-auto w-full rounded-xl object-contain"
+    />
+  </button>
+  {caption ? (
+    <figcaption class="mt-3 px-1 text-sm leading-6 text-muted-foreground">
+      {caption}
+    </figcaption>
+  ) : null}
+
+  <dialog
+    id={dialogId}
+    class="zoom-image-dialog m-auto max-h-[100dvh] max-w-[100dvw] overflow-hidden border-0 bg-transparent p-0 backdrop:bg-slate-950/78"
+    data-zoom-dialog
+  >
+    <div class="relative mx-auto inline-flex max-h-[100dvh] max-w-[min(96vw,1400px)] items-center justify-center p-4 sm:p-6">
+      <button
+        type="button"
+        class="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-950/68 text-white backdrop-blur-sm transition hover:bg-slate-950/82"
+        data-zoom-close
+        aria-label="关闭预览"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          class="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 6 18 18" />
+          <path d="M18 6 6 18" />
+        </svg>
+      </button>
+      <img
+        src={resolvedSrc}
+        alt={alt}
+        class="block h-auto max-h-[calc(100dvh-5rem)] max-w-full rounded-xl object-contain shadow-[0_28px_80px_rgba(15,23,42,0.35)]"
+      />
+    </div>
+  </dialog>
+</figure>
+
+<script is:inline data-root-id={rootId}>
+  (() => {
+    const script = document.currentScript;
+    const currentRootId =
+      script instanceof HTMLScriptElement ? script.dataset.rootId : undefined;
+    const root = currentRootId
+      ? document.getElementById(currentRootId)
+      : null;
+    if (!root || root.dataset.zoomReady === 'true') return;
+
+    root.dataset.zoomReady = 'true';
+    const trigger = root.querySelector('[data-zoom-trigger]');
+    const dialog = root.querySelector('[data-zoom-dialog]');
+    const close = root.querySelector('[data-zoom-close]');
+
+    if (
+      !(trigger instanceof HTMLButtonElement) ||
+      !(dialog instanceof HTMLDialogElement) ||
+      !(close instanceof HTMLButtonElement)
+    ) {
+      return;
+    }
+
+    const openDialog = () => dialog.showModal();
+    const closeDialog = () => dialog.close();
+
+    trigger.addEventListener('click', openDialog);
+    close.addEventListener('click', closeDialog);
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) {
+        closeDialog();
+      }
+    });
+  })();
+</script>

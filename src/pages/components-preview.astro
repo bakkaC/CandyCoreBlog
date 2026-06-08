@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/Layout.astro';
+import Columns from '../components/content/Columns.astro';
+import Excalidraw from '../components/content/Excalidraw.astro';
+import ZoomImage from '../components/content/ZoomImage.astro';
+
+import viteImage from '../content/notes/assets/Vite/image.png';
+import bestPracticeImage from '../content/thoughts/assets/AI coding Best Practice/image.png';
+import renderingImage from '../content/notes/assets/HTML渲染策略/file-20251208155153967.png';
+---
+
+<BaseLayout
+  title="内容组件预览"
+  description="用于预览图片放大、并排排版和 Excalidraw 组件"
+  noindex={true}
+>
+  <article class="mx-auto w-full max-w-6xl px-6 py-12">
+    <header class="mb-10 space-y-3">
+      <p class="text-xs font-semibold tracking-[0.24em] text-muted-foreground uppercase">
+        Components Preview
+      </p>
+      <h1 class="font-display text-4xl text-foreground">内容组件预览</h1>
+      <p class="max-w-3xl text-base leading-7 text-muted-foreground">
+        这里集中展示三个新组件：可放大图片、支持 2/3 列并排的排版容器，以及 Excalidraw 文件预览。
+      </p>
+    </header>
+
+    <section class="space-y-6">
+      <div class="space-y-2">
+        <h2 class="font-display text-2xl text-foreground">1. 图片组件</h2>
+        <p class="text-sm leading-6 text-muted-foreground">
+          点击图片可原地放大查看，适合正文中插图、流程截图和设计稿。
+        </p>
+      </div>
+
+      <ZoomImage
+        src={viteImage}
+        alt="Vite 构建流程示意图"
+        caption="点击图片后会以原图比例弹层展示。"
+      />
+
+      <ZoomImage
+        src={bestPracticeImage}
+        alt="AI coding Best Practice"
+        caption="也可以通过 `align` 和 `width` 控制居中与尺寸。"
+        align="center"
+        width="48rem"
+      />
+    </section>
+
+    <section class="mt-14 space-y-6">
+      <div class="space-y-2">
+        <h2 class="font-display text-2xl text-foreground">2. 并排排版组件</h2>
+        <p class="text-sm leading-6 text-muted-foreground">
+          `Columns` 默认移动端单列，桌面端切换成两列或三列，可放文本块，也可直接放图片组件。
+        </p>
+      </div>
+
+      <Columns columns={2}>
+        <div>
+          <h3 class="font-display text-lg text-foreground">双列文本</h3>
+          <p class="mt-3 text-sm leading-7 text-slate-700">
+            当一段说明需要和另一段对照阅读时，正文直接拆成两列会比连续长段更清晰。
+            这个容器会自动处理桌面端并排、移动端回落单列，以及内部首尾段落间距。
+          </p>
+        </div>
+        <div>
+          <h3 class="font-display text-lg text-foreground">适合的场景</h3>
+          <p class="mt-3 text-sm leading-7 text-slate-700">
+            例如：概念对比、优缺点并列、同一主题的两个视角、或三张连续截图的并排展示。
+          </p>
+        </div>
+      </Columns>
+
+      <Columns columns={3}>
+        <ZoomImage
+          src={viteImage}
+          alt="Vite 截图"
+          caption="图一"
+        />
+        <ZoomImage
+          src={bestPracticeImage}
+          alt="AI coding 截图"
+          caption="图二"
+        />
+        <ZoomImage
+          src={renderingImage}
+          alt="HTML 渲染策略截图"
+          caption="图三"
+        />
+      </Columns>
+    </section>
+
+    <section class="mt-14 space-y-6">
+      <div class="space-y-2">
+        <h2 class="font-display text-2xl text-foreground">3. Excalidraw 组件</h2>
+        <p class="text-sm leading-6 text-muted-foreground">
+          支持直接读取仓库里的 `.excalidraw` 或 Obsidian 导出的 `.excalidraw.mdx` 文件，并生成内嵌预览。
+        </p>
+      </div>
+
+      <Excalidraw
+        src="批量裁剪.excalidraw.excalidraw"
+        title="批量裁剪"
+        caption="直接读取 JSON 版 Excalidraw 文件。"
+      />
+
+      <Excalidraw
+        src="ReactRrender.excalidraw.mdx"
+        title="ReactRrender"
+        caption="也支持 Obsidian Excalidraw 导出的压缩 markdown 文件。"
+        align="left"
+        width="56rem"
+      />
+    </section>
+  </article>
+</BaseLayout>
