@@ -11,7 +11,7 @@ const withBase = (baseUrl: string, path: string) => {
 
 export function GET(context: APIContext) {
   const baseUrl = import.meta.env.BASE_URL;
-  const site = context.site ?? new URL('https://cdhxr.github.io');
+  const site = context.site ?? new URL('https://bakkac.github.io');
 
   const sitemapIndex = new URL(withBase(baseUrl, '/sitemap-index.xml'), site).toString();
 

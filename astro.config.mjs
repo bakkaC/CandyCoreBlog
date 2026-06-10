@@ -10,10 +10,10 @@ import { remarkWikiLinks } from './src/lib/remark-wiki-links.js';
 import tailwindcss from '@tailwindcss/vite';
 
 const srcDir = fileURLToPath(new URL('./src', import.meta.url));
-const siteBase = '/CandyCoreBlog/';
+const siteBase = '/Bakka/';
 
 export default defineConfig({
-  site: 'https://cdhxr.github.io',
+  site: 'https://bakkac.github.io',
   base: siteBase,
   trailingSlash: 'never',
   output: 'static',

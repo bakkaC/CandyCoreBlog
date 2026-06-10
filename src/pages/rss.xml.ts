@@ -60,7 +60,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: "Bakka's Blog",
     description: '记录前端开发、工程实践与随想杂记',
-    site: context.site ?? new URL('https://cdhxr.github.io'),
+    site: context.site ?? new URL('https://bakkac.github.io'),
     items: items.map((item) => ({
       title: item.title,
       description: item.description ?? '',
