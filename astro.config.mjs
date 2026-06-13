@@ -10,7 +10,7 @@ import { remarkWikiLinks } from './src/lib/remark-wiki-links.js';
 import tailwindcss from '@tailwindcss/vite';
 
 const srcDir = fileURLToPath(new URL('./src', import.meta.url));
-const siteBase = '/Bakka/';
+const siteBase = '/BakkacBlog/';
 
 export default defineConfig({
   site: 'https://bakkac.github.io',
